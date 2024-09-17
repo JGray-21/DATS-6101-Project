@@ -1,0 +1,44 @@
+---
+title: "DATS-6101-Project"
+output: html_document
+date: "`r Sys.Date()`"
+---
+``` {r, echo = TRUE}
+#Install packages and load package.
+install.packages('gssr', repos =
+                   c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+install.packages('gssrdoc', repos =
+                   c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
+                   
+library(gssr)
+
+
+#NEW INFO
+
+#Let's say we were going to compare a range of 1975 to 1980 to the data avalible in 2018. 
+#We would need to call all of the years we will need.
+gss18 <- gss_get_yr(2018)
+gss75 <- gss_get_yr(1975)
+gss76 <- gss_get_yr(1976)
+gss77 <- gss_get_yr(1977)
+gss78 <- gss_get_yr(1978)
+#There is no 1979 data.
+gss80 <- gss_get_yr(1980)
+
+#Check your data
+gss18
+gss75
+gss76
+gss77
+gss78
+gss80
+
+#Now we need to find all common columns within the data sets. Variables that are not avalible in all 5 subsets will not transfer over, because in order to combine these tables, the colmuns need to match.
+common <- Reduce(intersect, list(colnames(gss75), colnames(gss76), colnames(gss77), colnames(gss78), colnames(gss80)))
+
+#Once we identify and lable the common columns, we can combine our tables using our new "common" value. 
+gss75_80 <- rbind(gss75 [common], gss76 [common], gss77 [common], gss78 [common], gss80 [common])
+
+#Now you can see the new table contains all of the observations for all five years.
+gss75_80
+```
