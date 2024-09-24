@@ -28,19 +28,11 @@ Congovt - 91
 
 **confed - 73 - 84 and 86 - 22**
 
-Sex
-
-Race
-
+Sex\nRace\n
 Age
-
 Educ
-
 Income
-
 Region
-
 Polviews
-
 Relig
 
