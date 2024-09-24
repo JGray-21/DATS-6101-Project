@@ -11,3 +11,23 @@ We plan to look at how different demographics feel about different aspects of ou
 * Data set info(Marissa)
 
 For our analysis, we intend to use the cumulative, cross-sectional data from the General Social Survey (GSS) from 1972 to 2018. The GSS data collection is carried out by the National Opinion Research Center (NORC) at the University of Chicago to support social science research. Since 1972, the data has been gathered face-to-face. However, in recent years, researchers transitioned to telephone interviews for data collection. GSS data was collected annually from 1972 to 1994 (excluding 1979, 1981, and 1992), and since 1994, researchers now administer it every even-numbered year. From 1972 to 2018, GSS has been conducted using a simple random sample. Thus, our sample of 72,390 individuals is representative of the population.
+
+
+---------------------------------------------------------------------------------------------------
+
+Loctrust - 82
+fedtrust - 87
+
+poleff11-17 - 84
+Corrupt1-2 - 06 and 16
+Congovt - 91
+
+Sex
+Race
+Age
+Educ
+Income
+Region
+Polviews
+Relig
+
