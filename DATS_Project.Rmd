@@ -41,4 +41,10 @@ gss75_80 <- rbind(gss75 [common], gss76 [common], gss77 [common], gss78 [common]
 
 #Now you can see the new table contains all of the observations for all five years.
 gss75_80
+
+gss74_18 <- data(gss_all)
+
+sex_vector <- gss_all$sex
+sex_freq_table <- table(sex_vector)
+sex_freq_table
 ```
