@@ -16,19 +16,31 @@ For our analysis, we intend to use the cumulative, cross-sectional data from the
 ---------------------------------------------------------------------------------------------------
 
 Loctrust - 82
+
 fedtrust - 87
 
+
 poleff11-17 - 84
+
 Corrupt1-2 - 06 and 16
+
 Congovt - 91
+
 **confed - 73 - 84 and 86 - 22**
 
 Sex
+
 Race
+
 Age
+
 Educ
+
 Income
+
 Region
+
 Polviews
+
 Relig
 
