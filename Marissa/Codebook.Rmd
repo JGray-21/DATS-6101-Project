@@ -1,5 +1,12 @@
-#How to run a frequency.
+---
+title: "Codebook"
+author: "Marissa"
+date: "2024-09-30"
+output: html_document
+---
 
+```{r}
+library(knitr)
 library(gssr)
 devtools::install_github("kjhealy/gssrdoc")
 
@@ -52,3 +59,4 @@ polviews_freq_table
 relig_vector <- gss_all$relig
 relig_freq_table <- table(relig_vector)
 relig_freq_table
+```

@@ -28,7 +28,7 @@ For our analysis, we intend to use the cumulative, cross-sectional data from the
 * age
 * educ
 * income
-* region
-* polviews
-* relig
+* region 1972-2022
+* polviews 1974-2022
+* relig 1972-2022
 
