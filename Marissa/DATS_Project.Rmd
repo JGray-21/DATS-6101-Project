@@ -16,35 +16,48 @@ library(gssr)
 #NEW INFO
 
 #Let's say we were going to compare a range of 1975 to 1980 to the data avalible in 2018. 
-#We would need to call all of the years we will need.
-gss18 <- gss_get_yr(2018)
+#We would need to call all of the years we will need. 
+
+#Older years:
+gss74 <- gss_get_yr(1974)
 gss75 <- gss_get_yr(1975)
 gss76 <- gss_get_yr(1976)
 gss77 <- gss_get_yr(1977)
 gss78 <- gss_get_yr(1978)
-#There is no 1979 data.
 gss80 <- gss_get_yr(1980)
 
+#Newer years:
+gss16 <- gss_get_yr(2016)
+gss18 <- gss_get_yr(2018)
+gss21 <- gss_get_yr(2021)
+gss22 <- gss_get_yr(2022)
+
 #Check your data
-gss18
+gss74
 gss75
 gss76
 gss77
 gss78
 gss80
 
+gss16
+gss18
+gss21
+gss22
+
 #Now we need to find all common columns within the data sets. Variables that are not avalible in all 5 subsets will not transfer over, because in order to combine these tables, the colmuns need to match.
-common <- Reduce(intersect, list(colnames(gss75), colnames(gss76), colnames(gss77), colnames(gss78), colnames(gss80)))
+common_74_80 <- Reduce(intersect, list(colnames(gss74), colnames(gss75), colnames(gss76), colnames(gss77), colnames(gss78), colnames(gss80)))
+
+common_16_22 <- Reduce(intersect, list(colnames(gss16), colnames(gss18), colnames(gss21), colnames(gss22)))                       
 
 #Once we identify and lable the common columns, we can combine our tables using our new "common" value. 
-gss75_80 <- rbind(gss75 [common], gss76 [common], gss77 [common], gss78 [common], gss80 [common])
+gss74_80 <- rbind(gss74 [common_74_80], gss75 [common_74_80], gss76 [common_74_80], gss77 [common_74_80], gss78 [common_74_80], gss80 [common_74_80])
 
-#Now you can see the new table contains all of the observations for all five years.
-gss75_80
+gss16_22 <- rbind(gss16 [common_16_22], gss18 [common_16_22], gss21 [common_16_22], gss22 [common_16_22])
 
-gss74_18 <- data(gss_all)
+#New datasets
+gss74_80
 
-sex_vector <- gss_all$sex
-sex_freq_table <- table(sex_vector)
-sex_freq_table
+gss16_22 
+
 ```
