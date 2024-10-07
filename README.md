@@ -32,3 +32,34 @@ For our analysis, we intend to use the cumulative, cross-sectional data from the
 * polviews 1974-2022
 * relig 1972-2022
 
+
+
+
+
+---------------------------------------------------------------------------------------------------------
+
+gss74 <- gss_get_yr(1974)
+gss75 <- gss_get_yr(1975)
+gss76 <- gss_get_yr(1976)
+gss77 <- gss_get_yr(1977)
+gss78 <- gss_get_yr(1978)
+gss80 <- gss_get_yr(1980)
+
+gss16 <- gss_get_yr(2016)
+gss18 <- gss_get_yr(2018)
+gss21 <- gss_get_yr(2021)
+gss22 <- gss_get_yr(2022)
+
+
+common_74_80 <- Reduce(intersect, list(colnames(gss74), colnames(gss75), colnames(gss76), colnames(gss77), colnames(gss78), colnames(gss80)))
+
+common_16_22 <- Reduce(intersect, list(colnames(gss16), colnames(gss18), colnames(gss21), colnames(gss22)))                       
+ 
+gss74_80 <- rbind(gss74 [common_74_80], gss75 [common_74_80], gss76 [common_74_80], gss77 [common_74_80], gss78 [common_74_80], gss80 [common_74_80])
+
+gss16_22 <- rbind(gss16 [common_16_22], gss18 [common_16_22], gss21 [common_16_22], gss22 [common_16_22])
+
+
+gss74_80
+
+gss16_22
