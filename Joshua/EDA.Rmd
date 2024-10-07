@@ -22,6 +22,11 @@ Region
 
 ```{r}
 gss_which_years(gss_all, region)
+gss_which_years(gss_all, sex)
+gss_which_years(gss_all, race)
+gss_which_years(gss_all, age)
+gss_which_years(gss_all, educ)
+gss_which_years(gss_all, income)
 
 ```
 
@@ -79,3 +84,5 @@ plot18 <- ggplot(y18_f, aes(x=relig)) + geom_histogram(stat="count") + labs(titl
 plot18
 ```
 
+
+y74 <- gss_get_yr(1974)
