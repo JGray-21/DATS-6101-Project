@@ -1,0 +1,88 @@
+---
+title: "Region/Polviews/Religion"
+output: html_document
+date: "2024-10-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+## Years for each variable
+
+```{r}
+data(gss_all)
+```
+
+Region
+
+```{r}
+gss_which_years(gss_all, region)
+gss_which_years(gss_all, sex)
+gss_which_years(gss_all, race)
+gss_which_years(gss_all, age)
+gss_which_years(gss_all, educ)
+gss_which_years(gss_all, income)
+
+```
+
+Polviews - Think of self as liberal or conservative
+
+```{r}
+gss_which_years(gss_all, polviews)
+```
+
+Religion - R's religious preference
+
+```{r}
+gss_which_years(gss_all, relig)
+```
+
+Looks like we're starting with 1974. Looking at region distribution in 74 and 18
+
+```{r}
+y74 <- gss_get_yr(1974)
+y74_f <- y74[c('region', 'polviews', 'relig')]
+y74_f$region <- factor(y74_f$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+str(y74_f)
+plot74 <- ggplot(y74_f, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Regions in 1974", x="Region")
+plot74
+
+y18 <- gss_get_yr(2018)
+y18_f <- y18[c('region', 'polviews', 'relig')]
+y18_f$region <- factor(y18_f$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+str(y18_f)
+plot18 <- ggplot(y18_f, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Regions in 2018", x="Region")
+plot18
+```
+
+```{r}
+y74_f$polviews <- factor(y74_f$polviews, levels = c(1, 2, 3, 4, 5, 6, 7), labels = c("extremely liberal", "liberal", "slightly liberal", "moderate", "slightly conservative", "conservative", "extremely conservative"))
+
+y18_f$polviews <- factor(y18_f$polviews, levels = c(1, 2, 3, 4, 5, 6, 7), labels = c("extremely liberal", "liberal", "slightly liberal", "moderate", "slightly conservative", "conservative", "extremely conservative"))
+
+plot74 <- ggplot(y74_f, aes(x=polviews)) + geom_histogram(stat="count") + labs(title = "Political landscape in 1974", x="Political Lean")
+plot74
+
+plot18 <- ggplot(y18_f, aes(x=polviews)) + geom_histogram(stat="count") + labs(title = "Political Landscape in 2018", x="Political Lean")
+plot18
+```
+
+```{r}
+y74_f$relig <- factor(y74_f$relig, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), labels = c("prot", "cath", "jewish", "none", "other", "bud", "hind", "eastern", "islam", "ortho", "chris", "native", "nonden"))
+
+y18_f$relig <- factor(y18_f$relig, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), labels = c("prot", "cath", "jewish", "none", "other", "bud", "hind", "eastern", "islam", "ortho", "chris", "native", "nonden"))
+
+plot74 <- ggplot(y74_f, aes(x=relig)) + geom_histogram(stat="count") + labs(title = "Religion in 1974", x="Religion")
+plot74
+
+plot18 <- ggplot(y18_f, aes(x=relig)) + geom_histogram(stat="count") + labs(title = "Relogion in 2018", x="Religion")
+plot18
+```
+
+
+y74 <- gss_get_yr(1974)
