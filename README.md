@@ -63,3 +63,21 @@ gss16_22 <- rbind(gss16 [common_16_22], gss18 [common_16_22], gss21 [common_16_2
 gss74_80
 
 gss16_22
+
+
+## To Do List
+
+#### EDA / Summary
+ * Data table shape (num rows and cols)
+ * Mean, Median, Mode 
+ * Variable Description
+ * Distribution testing (Normal distribution or Not)
+   * QQ Plots
+ * Histograms
+
+#### Variation
+ * Variance and Standard Deviation
+
+#### Hypothesis Testing
+ * Chi Squared Test
+ * Maybe T Test???

@@ -1,0 +1,87 @@
+---
+title: "Age/Education/Income"
+output: html_document
+date: "2024-10-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+## Years for each variable
+
+```{r}
+data(gss_all)
+```
+
+Age - Agee of respondent
+
+```{r}
+gss_which_years(gss_all, age)
+
+```
+
+Education - Highest year of school completed
+
+```{r}
+gss_which_years(gss_all, educ)
+```
+
+Income - Total family income
+
+```{r}
+gss_which_years(gss_all, income)
+```
+
+Looks like we're starting with 1973. Looking at region distribution in 73 and 18
+
+
+```{r, message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(ggplot2)
+
+# Load the datasets for 1973 and 2018
+y73 <- gss_get_yr(1973)
+y18 <- gss_get_yr(2018)
+
+# Select the 'educ' column for both years
+y73_f <- y73['educ']
+y18_f <- y18['educ']
+
+# Define the education categories
+educ_labels <- c(
+  "-99: No answer", "-98: Do not Know/Cannot Choose", "No formal schooling", 
+  "1st grade", "2nd grade", "3rd grade", "4th grade", "5th grade", "6th grade",
+  "7th grade", "8th grade", "9th grade", "10th grade", "11th grade", "12th grade", 
+  "1 year of college", "2 years of college", "3 years of college", "4 years of college", 
+  "5 years of college", "6 years of college", "7 years of college", "8 or more years of college"
+)
+
+# Map 'educ' values to categories
+y73_f$educ <- factor(y73_f$educ, levels = c(-99, -98, 0:20), labels = educ_labels)
+y18_f$educ <- factor(y18_f$educ, levels = c(-99, -98, 0:20), labels = educ_labels)
+
+# Plot the education levels for 1973
+plot73_educ <- ggplot(y73_f, aes(x=educ, color=educ, fill=educ)) + 
+               geom_histogram(stat="count") + 
+               labs(title = "Education Levels in 1973", x="Education Level", y="Count") + 
+               theme_minimal() + 
+               theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# Plot the education levels for 2018
+plot18_educ <- ggplot(y18_f, aes(x=educ, color=educ, fill=educ)) + 
+               geom_histogram(stat="count") + 
+               labs(title = "Education Levels in 2018", x="Education Level", y="Count") + 
+               theme_minimal() + 
+               theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# Display both plots
+plot73_educ
+plot18_educ
+
+```
+
