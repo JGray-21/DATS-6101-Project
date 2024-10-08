@@ -1,0 +1,41 @@
+---
+title: "Age/Education/Income"
+output: html_document
+date: "2024-10-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+## Years for each variable
+
+```{r}
+data(gss_all)
+```
+
+Age - Agee of respondent
+
+```{r}
+gss_which_years(gss_all, age)
+
+```
+
+Education - Highest year of school completed
+
+```{r}
+gss_which_years(gss_all, educ)
+```
+
+Income - Total family income
+
+```{r}
+gss_which_years(gss_all, income)
+```
+
+Looks like we're starting with 1973. Looking at region distribution in 73 and 18
+
