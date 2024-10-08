@@ -11,6 +11,7 @@ install.packages('gssrdoc', repos =
                    c('https://kjhealy.r-universe.dev', 'https://cloud.r-project.org'))
                    
 library(gssr)
+library(gssrdoc)
 
 
 #NEW INFO
@@ -60,4 +61,15 @@ gss74_80
 
 gss16_22 
 
+```
+
+
+```{r}
+gss74_80
+gss16_22
+```
+
+```{r}
+write.csv(gss74_80, 'gss_old.csv')
+write.csv(gss16_22, 'gss_new.csv')
 ```
