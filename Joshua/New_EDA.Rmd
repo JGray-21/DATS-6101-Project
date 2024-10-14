@@ -1,0 +1,143 @@
+---
+title: "EDA for Polviews, Religion, and Region"
+author: "Joshua Gray"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+```
+
+```{r}
+#Read in data frames and filter down to the variables we want
+vars <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews')
+gss_old <- read.csv("../Marissa/gss_old.csv")
+gss_old <- gss_old[, vars]
+gss_new <- read.csv("../Marissa/gss_new.csv")
+gss_new <- gss_new[, vars]
+```
+
+```{r}
+#convert variables to factors with labels
+gss_old$region <- factor(gss_old$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+
+gss_new$region <- factor(gss_new$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+```
+
+```{r}
+# Change religion buckets 
+gss_new$relig <- case_when(
+  gss_new$relig == 1 ~ 'Protestant',
+  gss_new$relig == 2 ~ 'Catholic',
+  gss_new$relig == 3 ~ 'Jewish',
+  gss_new$relig == 4 ~ 'None',
+  gss_new$relig == 5 ~ 'Other',
+  gss_new$relig == 6 ~ 'Other',
+  gss_new$relig == 7 ~ 'Other',
+  gss_new$relig == 8 ~ 'Other',
+  gss_new$relig == 9 ~ 'Other',
+  gss_new$relig == 10 ~ 'Christian',
+  gss_new$relig == 11 ~ 'Christian',
+  gss_new$relig == 12 ~ 'Other',
+  gss_new$relig == 13 ~ 'Christian',
+  TRUE ~ 'NA'
+)
+
+gss_old$relig <- case_when(
+  gss_old$relig == 1 ~ 'Protestant',
+  gss_old$relig == 2 ~ 'Catholic',
+  gss_old$relig == 3 ~ 'Jewish',
+  gss_old$relig == 4 ~ 'None',
+  gss_old$relig == 5 ~ 'Other',
+  gss_old$relig == 6 ~ 'Other',
+  gss_old$relig == 7 ~ 'Other',
+  gss_old$relig == 8 ~ 'Other',
+  gss_old$relig == 9 ~ 'Other',
+  gss_old$relig == 10 ~ 'Christian',
+  gss_old$relig == 11 ~ 'Christian',
+  gss_old$relig == 12 ~ 'Other',
+  gss_old$relig == 13 ~ 'Christian',
+  TRUE ~ 'NA'
+)
+```
+
+```{r}
+# Combine two tables into one
+gss_combo <- rbind(gss_old, gss_new)
+```
+
+# Region (region)
+
+### Description
+Here is a map of the country devided into its regions
+
+![US Regions](US_Regions.png)
+
+### Mean, Median, and Mode
+
+The most frequent region in the 70s is `r names(which.max(table(gss_old$region)))`. 
+The most frequent region in the 20s is `r names(which.max(table(gss_new$region)))`.
+The least frequent region in the 70's is `r names(which.min(table(gss_old$region)))`. 
+And the least frequent region in the 20s is `r names(which.min(table(gss_new$region)))`.
+
+### Distribution
+
+```{r}
+#Plot histograms
+ggplot(gss_old, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 1974-1980", x="Region")
+ggplot(gss_new, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 2016-2021", x="Region")
+```
+
+**Relevence??**
+
+***
+
+# Religion (relig)
+
+### Descrpition
+There are several more religions listed in the newer surveys. We decided to combine the smaller religions into one bucket called "Other" in order to more closely resemble the older surveys. 
+
+### Mean, Median, Mode
+The most frequent religion in the early surveys is  `r names(which.max(table(gss_old$relig)))`. 
+The most frequent religion in the recent surveys is `r names(which.max(table(gss_new$relig)))`.
+
+### Distribuion
+
+```{r}
+ggplot(gss_old, aes(x=relig)) + geom_histogram(stat="count") + labs(title = "Religion 1974-1980", x="Religion")
+ggplot(gss_new, aes(x=relig)) + geom_histogram(stat="count") + labs(title = "Religion 2016-2021", x="Religion")
+```
+
+**Relevence?**
+
+***
+
+# Political Spectrum (polviews)
+
+### Descrpition
+For this variable, respondents list where they fall on the political spectrum between extremely conservative and extremely progressive. 
+
+### Mean, Median, Mode
+The average value for political placement in the early surveys is `r mean(gss_old$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss_new$polviews, na.rm=T)`.
+
+### Distribuion
+
+```{r}
+qqnorm(gss_old$polviews[!is.na(gss_old$polviews)])
+qqline(gss_old$polviews[!is.na(gss_old$polviews)])
+```
