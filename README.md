@@ -73,7 +73,7 @@ gss16_22
  * Variable Description
  * Distribution testing (Normal distribution or Not)
    * QQ Plots
- * Histograms
+ * Histograms (remember we cannot use histograms for discrete var, only continuous. So use a bar graph for discrete)
 
 #### Variation
  * Variance and Standard Deviation
@@ -81,3 +81,7 @@ gss16_22
 #### Hypothesis Testing
  * Chi Squared Test
  * Maybe T Test???
+
+ ---------------------------------------------------------------------------------------
+ https://docs.google.com/presentation/d/1Gfj1nCnP6ooDBm2K4sZ8lFvxCuj-LCp5R851QbFbwbg/edit?usp=sharing
+ 
