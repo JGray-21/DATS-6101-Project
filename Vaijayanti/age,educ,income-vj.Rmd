@@ -1,0 +1,203 @@
+---
+title: "Age/Education/Income"
+output: html_document
+date:   Sys.Date()
+---
+
+```{r , include=FALSE}
+# Load necessary libraries
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+```
+
+```{r , include=FALSE}
+# Load the GSS dataset
+data(gss_all)
+
+# Get the years for age variable
+gss_which_years(gss_all, age)
+
+# Get the years for education variable
+gss_which_years(gss_all, educ)
+
+# Get the years for income variable
+gss_which_years(gss_all, income)
+
+# Load the datasets for 1973 and 2018
+y73 <- gss_get_yr(1973)
+y18 <- gss_get_yr(2018)
+
+# Select the 'educ' column for both years
+y73_f <- y73['educ']
+y18_f <- y18['educ']
+```
+
+
+```{r Education Analysis}
+
+# Define the education categories
+educ_labels <- c(
+  "-99: No answer", "-98: Do not Know/Cannot Choose", "No formal schooling", 
+  "1st grade", "2nd grade", "3rd grade", "4th grade", "5th grade", "6th grade",
+  "7th grade", "8th grade", "9th grade", "10th grade", "11th grade", "12th grade", 
+  "1 year of college", "2 years of college", "3 years of college", "4 years of college", 
+  "5 years of college", "6 years of college", "7 years of college", "8 or more years of college"
+)
+
+# Map 'educ' values to categories
+y73_f$educ <- factor(y73_f$educ, levels = c(-99, -98, 0:20), labels = educ_labels)
+y18_f$educ <- factor(y18_f$educ, levels = c(-99, -98, 0:20), labels = educ_labels)
+
+
+# Plot the education levels for 1973
+plot73_educ <- ggplot(y73_f, aes(x=educ, color=educ, fill=educ)) + 
+               geom_histogram(stat="count") + 
+               labs(title = "Education Levels in 1973", x="Education Level", y="Count") + 
+               theme_minimal() + 
+               theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# Plot the education levels for 2018
+plot18_educ <- ggplot(y18_f, aes(x=educ, color=educ, fill=educ)) + 
+               geom_histogram(stat="count") + 
+               labs(title = "Education Levels in 2018", x="Education Level", y="Count") + 
+               theme_minimal() + 
+               theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+# Display both plots
+plot73_educ
+plot18_educ
+```
+
+```{r Income Analysis}
+# Define income labels for the analysis
+income_labels <- c("Under $1,000", "$1,000 to $2,999", "$3,000 to $3,999", 
+                   "$4,000 to $4,999", "$5,000 to $5,999", "$6,000 to $6,999",
+                   "$7,000 to $7,999", "$8,000 to $9,999", "$10,000 to $14,999",
+                   "$15,000 to $19,999", "$20,000 to $24,999", "$25,000 or more",
+                   "Inapplicable", "No answer", "Do not know", "Skipped", "Refused")
+
+# Filtering the data for the years 1973 and 2018
+data_filtered_income <- gss_all[gss_all$year %in% c(1973, 2018), ]
+
+# Creating a factor for 'income' with labels
+data_filtered_income$income <- factor(data_filtered_income$income, 
+                                       levels = 0:12, 
+                                       labels = income_labels[1:length(unique(data_filtered_income$income))])
+
+# Summarizing the 'income' variable for the filtered data
+summary(data_filtered_income$income)
+
+# Checking for missing values in 'income' for the filtered data
+sum(is.na(data_filtered_income$income))
+
+# Visualizing the distribution of 'income' for 1973 and 2018 using a bar plot
+barplot(table(data_filtered_income$income, data_filtered_income$year), 
+        beside = TRUE, 
+        main = "Distribution of Income in 1973 and 2018", 
+        xlab = "Income Categories", 
+        ylab = "Frequency", 
+        col = c("lightblue", "lightgreen"), 
+        legend = rownames(table(data_filtered_income$income, data_filtered_income$year)))
+
+# Boxplot to detect outliers in 'income' for the filtered years
+boxplot(data_filtered_income$income ~ data_filtered_income$year, 
+        main = "Boxplot of Income by Year", 
+        ylab = "Income Categories", 
+        col = c("lightgreen", "lightcoral"),
+        names = c("1973", "2018"))
+
+
+
+
+
+# Handling missing values (if needed) - for example, replacing with the mode
+mode_income <- names(sort(table(data_filtered_income$income), decreasing = TRUE)[1])
+data_filtered_income$income[is.na(data_filtered_income$income)] <- mode_income
+
+# Summary after replacing missing values for filtered data
+summary(data_filtered_income$income)
+
+# Calculating additional statistics for 'income' in the filtered years
+income_table_1973 <- table(data_filtered_income$income[data_filtered_income$year == 1973])
+income_table_2018 <- table(data_filtered_income$income[data_filtered_income$year == 2018])
+
+# Print calculated income distributions
+cat("Income Distribution in 1973:\n")
+print(income_table_1973)
+
+cat("\nIncome Distribution in 2018:\n")
+print(income_table_2018)
+# Filtering the data for the years 1973 and 2018
+data_filtered_education <- gss_all[gss_all$year %in% c(1973, 2018), ]
+
+```
+
+```{r Age Analysis}
+# Load required package
+library(ggplot2)
+
+# Check data structures
+str(y73_f)
+str(y18_f)
+
+# Create a function to categorize ages
+categorize_age <- function(age) {
+  print(age)  # Print each age for debugging
+  if (age >= 18 && age <= 24) {
+    return("18-24")
+  } else if (age >= 25 && age <= 34) {
+    return("25-34")
+  } else if (age >= 35 && age <= 44) {
+    return("35-44")
+  } else if (age >= 45 && age <= 54) {
+    return("45-54")
+  } else if (age >= 55 && age <= 64) {
+    return("55-64")
+  } else if (age >= 65 && age <= 74) {
+    return("65-74")
+  } else if (age >= 75 && age <= 84) {
+    return("75-84")
+  } else if (age >= 85 && age <= 89) {
+    return("85-89")
+  } else if (age >= 90) {
+    return("90 or older")
+  } else {
+    return(NA)  # Return NA for ages below 18 or any invalid ages
+  }
+}
+
+# Apply the categorization function to the age variable
+y73_f$age_cat <- sapply(y73_f$age, categorize_age)
+y18_f$age_cat <- sapply(y18_f$age, categorize_age)
+
+# Check the categorization result
+head(y73_f$age_cat)
+head(y18_f$age_cat)
+
+# Convert age categories to factor for plotting
+y73_f$age_cat <- factor(y73_f$age_cat, levels = age_labels)
+y18_f$age_cat <- factor(y18_f$age_cat, levels = age_labels)
+
+# Plot the age distribution for 1973
+plot73_age <- ggplot(y73_f, aes(x=age_cat, color=age_cat, fill=age_cat)) + 
+              geom_histogram(stat="count") + 
+              labs(title = "Age Distribution in 1973", x="Age Category", y="Count") + 
+              theme_minimal() + 
+              theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Plot the age distribution for 2018
+plot18_age <- ggplot(y18_f, aes(x=age_cat, color=age_cat, fill=age_cat)) + 
+              geom_histogram(stat="count") + 
+              labs(title = "Age Distribution in 2018", x="Age Category", y="Count") + 
+              theme_minimal() + 
+              theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Display both plots
+plot73_age
+plot18_age
+
+```
