@@ -1,5 +1,5 @@
 ---
-title: "Group Project"
+title: "HW 3: R and RMarkdown Basics"
 author: "Marissa Mowers"
 date: "`r Sys.Date()`"
 output:
@@ -64,11 +64,6 @@ gss16_22
 ?confed
 
 xkablesummary(gss74_80[, c("confed")])
-missing_cases_confed_74_80 <- sum(is.na(gss74_80$confed))
-valid_cases_confed_74_80 <- sum(!is.na(gss74_80$confed))
-
-missing_cases_confed_74_80
-valid_cases_confed_74_80
 
 
 gss74_80$confed <- factor(gss74_80$confed, levels = c(1, 2, 3), labels = c("A Great Deal", "Only Some", "Hardly Any"))
@@ -78,26 +73,23 @@ str(gss16_22$confed)
 ggplot(data=gss74_80, aes(x = confed, color=confed, fill=confed)) + 
   geom_bar() +
   labs(x= "Confidence in the Executive Branch of the Federal Government", y= "Frequency") +
-  labs(title = "Bar Graph of Confidence in the Executive Branch from 1974-1980") 
+  labs(title = "Bar Graph of Confidence in the Executive Branch of the Federal Government from 1974 Through 1980, using `ggplot`") 
 
 ```
 
 ## EDA of Confidence in the Executive Branch of the Federal Government from 2016 through 2022.
 ```{r, echo=TRUE}
 xkablesummary(gss16_22[, c("confed")])
-missing_cases_confed_16_22 <- sum(is.na(gss16_22$confed))
-valid_cases_confed_16_22 <- sum(!is.na(gss16_22$confed))
-
-missing_cases_confed_16_22
-valid_cases_confed_16_22
 
 
 gss16_22$confed <- factor(gss16_22$confed, levels = c(1, 2, 3), labels = c("A Great Deal", "Only Some", "Hardly Any"))
 
+str(gss16_22$confed)
+
 ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) + 
   geom_bar() +
   labs(x= "Confidence in the Executive Branch of the Federal Government", y= "Frequency") +
-  labs(title = "Bar Graph of Confidence in the Executive Branch from 2016-2022") 
+  labs(title = "Bar Graph of Confidence in the Executive Branch of the Federal Government from 2016 Through 2022, using `ggplot`") 
 ```
 
 
@@ -108,11 +100,6 @@ ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) +
 
 ```{r, echo=TRUE}
 xkablesummary(gss74_80[, c("sex")])
-missing_cases_sex_74_80 <- sum(is.na(gss74_80$sex))
-valid_cases_sex_74_80 <- sum(!is.na(gss74_80$sex))
-
-missing_cases_sex_74_80
-valid_cases_sex_74_80
 
 gss74_80$sex <- factor(gss74_80$sex, levels = c(1, 2), labels = c("Male", "Female"))
 
@@ -121,7 +108,7 @@ str(gss74_80$sex)
 ggplot(data=gss74_80, aes(x = sex, color=sex, fill=sex)) + 
   geom_bar() +
   labs(x= "Sex", y= "Frequency") +
-  labs(title = "Bar Graph of Sex Distribution from 1974 Through 1980") 
+  labs(title = "Bar Graph of Sex Distribution from 1974 Through 1980, using `ggplot`") 
 ```
 
 ## EDA of Sex from 2016 through 2022.
@@ -129,10 +116,6 @@ ggplot(data=gss74_80, aes(x = sex, color=sex, fill=sex)) +
 
 ```{r, echo=TRUE}
 xkablesummary(gss16_22[, c("sex")])
-missing_cases_sex_16_22 <- sum(is.na(gss16_22$sex))
-valid_cases_sex_16_22 <- sum(!is.na(gss16_22$sex))
-missing_cases_sex_16_22
-valid_cases_sex_16_22
 
 gss16_22$sex <- factor(gss16_22$sex, levels = c(1, 2), labels = c("Male", "Female"))
 
@@ -141,7 +124,7 @@ str(gss16_22$sex)
 ggplot(data=gss16_22, aes(x = sex, color=sex, fill=sex)) + 
   geom_bar() +
   labs(x= "Sex", y= "Frequency") +
-  labs(title = "Bar Graph of Sex Distribution from 2016 Through 2022") 
+  labs(title = "Bar Graph of Sex Distribution from 2016 Through 2022, using `ggplot`") 
 ```
 
 
@@ -152,11 +135,6 @@ ggplot(data=gss16_22, aes(x = sex, color=sex, fill=sex)) +
 
 ```{r, echo=TRUE}
 xkablesummary(gss74_80[, c("race")])
-missing_cases_race_74_80 <- sum(is.na(gss74_80$race))
-valid_cases_race_74_80 <- sum(!is.na(gss74_80$race))
-
-missing_cases_race_74_80
-valid_cases_race_74_80
 
 gss74_80$race <- factor(gss74_80$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
 
@@ -165,7 +143,7 @@ str(gss74_80$race)
 ggplot(data=gss74_80, aes(x = race, color=race, fill=race)) + 
   geom_bar() +
   labs(x= "Race", y= "Frequency") +
-  labs(title = "Bar Graph of Race Distribution from 1974 Through 1980") 
+  labs(title = "Bar Graph of Race Distribution from 1974 Through 1980, using `ggplot`") 
 ```
 
 
@@ -174,11 +152,6 @@ ggplot(data=gss74_80, aes(x = race, color=race, fill=race)) +
 
 ```{r, echo=TRUE}
 xkablesummary(gss16_22[, c("race")])
-missing_cases_race_16_22 <- sum(is.na(gss16_22$race))
-valid_cases_race_16_22 <- sum(!is.na(gss16_22$race))
-
-missing_cases_race_16_22
-valid_cases_race_16_22
 
 gss16_22$race <- factor(gss16_22$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
 
@@ -187,7 +160,7 @@ str(gss16_22$race)
 ggplot(data=gss16_22, aes(x = race, color=race, fill=race)) + 
   geom_bar() +
   labs(x= "Race", y= "Frequency") +
-  labs(title = "Bar Graph of Race Distribution from 2016 Through 2022") 
+  labs(title = "Bar Graph of Race Distribution from 2016 Through 2022, using `ggplot`") 
 ```
 
 # Chi-Squared Test 
