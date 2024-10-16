@@ -192,6 +192,8 @@ ggplot(data=gss16_22, aes(x = race, color=race, fill=race)) +
 
 # Chi-Squared Test 
 
+
+
 #Confidence in the Executive Branch of the Federal Government vs. Sex
 
 ## 1974 through 1980
