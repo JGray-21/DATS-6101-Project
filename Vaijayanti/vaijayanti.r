@@ -19,3 +19,6 @@ table<-table(df)
 # Create Frequency Table with Proportions
 prob_table <- table / sum(table)	 
 print(prob_table)
+
+
+

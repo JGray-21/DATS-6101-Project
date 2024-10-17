@@ -1,0 +1,145 @@
+---
+title: "EDA for Education"
+author: "Vaijayanti Deshmukh"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+```
+```{r}
+#Read in data frames, filter data
+vars <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews')
+gss_old <- read.csv("C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\DATS-6101-Project\\gss74_80.csv")
+gss_old <- gss_old[, vars]
+gss_new <- read.csv("C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\DATS-6101-Project\\gss16_22.csv")
+gss_new <- gss_new[, vars]
+```
+```{r}
+#convert variables to factors with labels
+gss_old$region <- factor(gss_old$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+
+gss_new$region <- factor(gss_new$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+```
+```{r}
+# Change education buckets 
+gss_new$educ <- case_when(
+  gss_new$educ == 1 ~ 'High School or Less',
+  gss_new$educ == 2 ~ 'High School or Less',
+  gss_new$educ == 3 ~ 'High School or Less',
+  gss_new$educ == 4 ~ 'High School or Less',
+  gss_new$educ == 5 ~ 'High School or Less',
+  gss_new$educ == 6 ~ 'High School or Less',
+  gss_new$educ == 7 ~ 'High School or Less',
+  gss_new$educ == 8 ~ 'High School or Less',
+  gss_new$educ == 9 ~ 'High School or Less',
+  gss_new$educ == 10 ~ 'High School or Less',
+  gss_new$educ == 11 ~ 'High School or Less',
+  gss_new$educ == 12 ~ 'High School or Less',
+  gss_new$educ == 13 ~ 'Some College',
+  gss_new$educ == 14 ~ 'Some College',
+  gss_new$educ == 15 ~ 'Some College',
+  gss_new$educ == 16 ~ 'Some College',
+  gss_new$educ == 17 ~ 'Graduate',
+  gss_new$educ == 18 ~ 'Graduate',
+  gss_new$educ == 19 ~ 'Graduate',
+  gss_new$educ == 20 ~ 'Graduate',
+  TRUE ~ 'NA'
+)
+
+
+  gss_old$educ <- case_when(
+  gss_old$educ == 1 ~ 'High School or Less',
+  gss_old$educ == 2 ~ 'High School or Less',
+  gss_old$educ == 3 ~ 'High School or Less',
+  gss_old$educ == 4 ~ 'High School or Less',
+  gss_old$educ == 5 ~ 'High School or Less',
+  gss_old$educ == 6 ~ 'High School or Less',
+  gss_old$educ == 7 ~ 'High School or Less',
+  gss_old$educ == 8 ~ 'High School or Less',
+  gss_old$educ == 9 ~ 'High School or Less',
+  gss_old$educ == 10 ~ 'High School or Less',
+  gss_old$educ == 11 ~ 'High School or Less',
+  gss_old$educ == 12 ~ 'High School or Less',
+  gss_old$educ == 13 ~ 'Some College',
+  gss_old$educ == 14 ~ 'Some College',
+  gss_old$educ == 15 ~ 'Some College',
+  gss_old$educ == 16 ~ 'Some College',
+  gss_old$educ == 17 ~ 'Graduate',
+  gss_old$educ == 18 ~ 'Graduate',
+  gss_old$educ == 19 ~ 'Graduate',
+  gss_old$educ == 20 ~ 'Graduate',
+  TRUE ~ 'NA'
+)
+```
+```{r}
+# Combine two tables into one
+gss_combo <- rbind(gss_old, gss_new)
+```
+
+# Education
+
+### Mean, Median, and Mode
+
+The most frequent education in the 70s is `r names(which.max(table(gss_old$educ)))`. 
+The most frequent education in the 20s is `r names(which.max(table(gss_new$educ)))`.
+The least frequent education in the 70's is `r names(which.min(table(gss_old$educ)))`. 
+And the least frequent education in the 20s is `r names(which.min(table(gss_new$educ)))`.
+
+### Distribution
+
+```{r}
+
+library(ggplot2)
+
+# Histogram for gss_old
+ggplot(gss_old, aes(x = educ, color = region, fill = region)) + 
+  geom_histogram(stat = "Count") + 
+  labs(title = "Education 1974-1980", x = "Education Level") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+# Histogram for gss_new
+ggplot(gss_new, aes(x = educ, color = region, fill = region)) + 
+  geom_histogram(stat = "Count") + 
+  labs(title = "Education 2016-2022", x = "Education Level") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+
+# Plot bar charts for education levels in the older dataset (1974-1980)
+ggplot(gss_old, aes(x = educ, fill = region)) + 
+  geom_bar(color = "blue", position = "dodge") + 
+  labs(title = "Education Distribution (1974-1980)", x = "Education Level", y = "Count") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) +
+  scale_fill_brewer(palette = "Set3") 
+
+# Plot bar charts for education levels in the newer dataset (2016-2022)
+ggplot(gss_new, aes(x = educ, fill = region)) + 
+  geom_bar(color = "blue", position = "dodge") + 
+  labs(title = "Education Distribution (2016-2022)", x = "Education Level", y = "Count") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) +
+  scale_fill_brewer(palette = "Set3")  
+
+```
+
+
+### Mode
+The most frequent education in the early surveys is  `r names(which.max(table(gss_old$educ)))`. 
+The most frequent education in the recent surveys is `r names(which.max(table(gss_new$educ)))`.
+
+
+
+```
