@@ -1,0 +1,112 @@
+---
+title: "EDA for Income"
+author: "Vaijayanti Deshmukh"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+```
+```{r}
+#Read in data frames, filter data
+vars <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews')
+gss_old <- read.csv("C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\DATS-6101-Project\\gss74_80.csv")
+gss_old <- gss_old[, vars]
+gss_new <- read.csv("C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\DATS-6101-Project\\gss16_22.csv")
+gss_new <- gss_new[, vars]
+```
+
+
+```{r}
+# Change income buckets 
+gss_new$income <- case_when(
+  gss_new$income == 1 ~ 'Low',
+  gss_new$income == 2 ~ 'Low',
+  gss_new$income== 3 ~ 'Low',
+  gss_new$income == 4 ~ 'Lower Middle',
+  gss_new$income == 5 ~ 'Lower Middle',
+  gss_new$income == 6 ~ 'Middle',
+  gss_new$income == 7 ~ 'Middle',
+  gss_new$income == 8 ~ 'Middle',
+  gss_new$income == 9 ~ 'Upper Middle',
+  gss_new$income == 10 ~ 'Upper Middle',
+  gss_new$income == 11 ~ 'High',
+  gss_new$income == 12 ~ 'High',
+  TRUE ~ 'NA'
+)
+
+
+  gss_old$income <- case_when(
+  gss_old$income == 1 ~ 'Low',
+  gss_old$income == 2 ~ 'Low',
+  gss_old$income == 3 ~ 'Low',
+  gss_old$income == 4 ~ 'Lower Middle',
+  gss_old$income == 5 ~ 'Lower Middle',
+  gss_old$income == 6 ~ 'Middle',
+  gss_old$income == 7 ~ 'Middle',
+  gss_old$income == 8 ~ 'Middle',
+  gss_old$income == 9 ~ 'Upper Middle',
+  gss_old$income == 10 ~ 'Upper Middle',
+  gss_old$income == 11 ~ 'High',
+  gss_old$income == 12 ~ 'High',
+  TRUE ~ 'NA'
+)
+```
+```{r}
+# Combine two tables into one
+gss_combo <- rbind(gss_old, gss_new)
+```
+
+# Education
+
+### Mean, Median, and Mode
+
+The most frequent Income in the 70s is `r names(which.max(table(gss_old$income)))`. 
+The most frequent Income in the 20s is `r names(which.max(table(gss_new$income)))`.
+The least frequent Income in the 70's is `r names(which.min(table(gss_old$income)))`. 
+And the least frequent Income in the 20s is `r names(which.min(table(gss_new$income)))`.
+
+### Distribution
+
+```{r}
+
+library(ggplot2)
+
+# Histogram for gss_old
+ggplot(gss_old, aes(x = income, color = income, fill = income)) + 
+  geom_histogram(stat = "Count") + 
+  labs(title = "Income 1974-1980", x = "Income Level") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+# Histogram for gss_new
+ggplot(gss_new, aes(x = income, color = income, fill = income)) + 
+  geom_histogram(stat = "Count") + 
+  labs(title = "Income 2016-2022", x = "Income Level") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+
+
+```
+
+
+### Mode
+The most frequent Income in the early surveys is  `r names(which.max(table(gss_old$income)))`. 
+The most frequent Income in the recent surveys is `r names(which.max(table(gss_new$income)))`.
+
+
+
+```
