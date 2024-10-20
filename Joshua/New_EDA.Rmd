@@ -21,15 +21,25 @@ library(gssrdoc)
 library(ggplot2)
 library(RColorBrewer)
 library(dplyr)
+library(ezids)
 ```
 
 ```{r}
 #Read in data frames and filter down to the variables we want
-vars <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews')
-gss_old <- read.csv("../Marissa/gss_old.csv")
-gss_old <- gss_old[, vars]
-gss_new <- read.csv("../Marissa/gss_new.csv")
-gss_new <- gss_new[, vars]
+vars1 <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews', 'confed')
+vars2 <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income16', 'region', 'polviews', 'confed')
+gss_old <- read.csv("../gss74_80.csv")
+gss_old <- gss_old[, vars1]
+gss_new <- read.csv("../gss16_22.csv")
+gss_new <- gss_new[, vars2]
+
+
+summary(gss_old$region)
+summary(gss_new$region)
+summary(gss_old$relig)
+summary(gss_new$relig)
+summary(gss_old$polviews)
+summary(gss_new$polviews)
 ```
 
 ```{r}
@@ -51,11 +61,11 @@ gss_new$relig <- case_when(
   gss_new$relig == 7 ~ 'Other',
   gss_new$relig == 8 ~ 'Other',
   gss_new$relig == 9 ~ 'Other',
-  gss_new$relig == 10 ~ 'Christian',
-  gss_new$relig == 11 ~ 'Christian',
+  gss_new$relig == 10 ~ 'Other',
+  gss_new$relig == 11 ~ 'Other',
   gss_new$relig == 12 ~ 'Other',
-  gss_new$relig == 13 ~ 'Christian',
-  TRUE ~ 'NA'
+  gss_new$relig == 13 ~ 'Other',
+  TRUE ~ NA
 )
 
 gss_old$relig <- case_when(
@@ -68,17 +78,48 @@ gss_old$relig <- case_when(
   gss_old$relig == 7 ~ 'Other',
   gss_old$relig == 8 ~ 'Other',
   gss_old$relig == 9 ~ 'Other',
-  gss_old$relig == 10 ~ 'Christian',
-  gss_old$relig == 11 ~ 'Christian',
+  gss_old$relig == 10 ~ 'Other',
+  gss_old$relig == 11 ~ 'Other',
   gss_old$relig == 12 ~ 'Other',
-  gss_old$relig == 13 ~ 'Christian',
-  TRUE ~ 'NA'
+  gss_old$relig == 13 ~ 'Other',
+  TRUE ~ NA
 )
+
+gss_new$income16 <- factor(gss_new$income16, levels = c(1:25), labels = c('Low','Low','Low','Low','Low','Low','Low','Low', 'Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle', 'Middle','Middle','Middle','Middle','Middle', 'Upper-Middle','Upper-Middle', 'High', 'High', 'High'))
+```
+
+
+```{r}
+ggplot(gss_new, aes(x=income16, color=income16, fill=income16)) + geom_histogram(stat="count") + labs(title = "Income 2016-2022", x="Income Level")
+```
+```{r}
+pol_data <- gss_new[, c('income16', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$confed, pol_data$income16)
+rel_new
+rel_new$observed
 ```
 
 ```{r}
 # Combine two tables into one
-gss_combo <- rbind(gss_old, gss_new)
+#gss_combo <- rbind(gss_old, gss_new)
+gss_combo$prez <- case_when(
+  gss_combo$year == 1974 ~ 'r',
+  gss_combo$year == 1975 ~ 'r',
+  gss_combo$year == 1976 ~ 'r',
+  gss_combo$year == 1977 ~ 'd',
+  gss_combo$year == 1978 ~ 'd',
+  gss_combo$year == 1980 ~ 'd',
+  gss_combo$year == 2016 ~ 'r',
+  gss_combo$year == 2018 ~ 'r',
+  gss_combo$year == 2021 ~ 'd',
+  gss_combo$year == 2022 ~ 'd',
+)
+```
+
+```{r}
+#unique(gss_combo$year)
 ```
 
 # Region (region)
@@ -100,12 +141,44 @@ And the least frequent region in the 20s is `r names(which.min(table(gss_new$reg
 ```{r}
 #Plot histograms
 ggplot(gss_old, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 1974-1980", x="Region")
-ggplot(gss_new, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 2016-2021", x="Region")
+ggplot(gss_new, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 2016-2022", x="Region")
+```
+```{r}
+ggplot(gss_new, aes(x=age)) + geom_histogram(binwidth = 5, stat="count") + labs(title = "Region 2016-2022", x="Region")
+```
+```{r}
+unique(gss_old$age)
 ```
 
 **Relevence??**
 
 ***
+
+### Hypothesis Tests
+```{r}
+pol_data <- gss_old[, c('region', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_old <- chisq.test(pol_data$region, pol_data$confed)
+rel_old
+rel_old$observed
+
+pol_data <- gss_new[, c('region', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_old <- chisq.test(pol_data$region, pol_data$confed)
+rel_old
+rel_old$observed
+```
+
+```{r}
+pol_data <- gss_new[, c('region', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$region, pol_data$confed)
+rel_new
+rel_new$observed
+```
 
 # Religion (relig)
 
@@ -119,11 +192,28 @@ The most frequent religion in the recent surveys is `r names(which.max(table(gss
 ### Distribuion
 
 ```{r}
-ggplot(gss_old, aes(x=relig)) + geom_histogram(stat="count") + labs(title = "Religion 1974-1980", x="Religion")
-ggplot(gss_new, aes(x=relig)) + geom_histogram(stat="count") + labs(title = "Religion 2016-2021", x="Religion")
+ggplot(gss_old, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="count") + labs(title = "Religion 1974-1980", x="Religion")
+ggplot(gss_new, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="count") + labs(title = "Religion 2016-2022", x="Religion")
 ```
 
 **Relevence?**
+
+### Hypothesis Test
+```{r}
+pol_data <- gss_old[, c('relig', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_old <- chisq.test(pol_data$relig, pol_data$confed)
+rel_old
+rel_old$observed
+
+pol_data <- gss_new[, c('relig', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$relig, pol_data$confed)
+rel_new
+rel_new$observed
+```
 
 ***
 
@@ -140,4 +230,41 @@ The average value for political placement in the early surveys is `r mean(gss_ol
 ```{r}
 qqnorm(gss_old$polviews[!is.na(gss_old$polviews)])
 qqline(gss_old$polviews[!is.na(gss_old$polviews)])
+qqnorm(gss_new$polviews[!is.na(gss_new$polviews)])
+qqline(gss_new$polviews[!is.na(gss_new$polviews)])
+
+y <- ggplot(gss_old, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
+y + scale_fill_manual(values = c('red'))
+            
+ggplot(gss_new, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
+```
+```{r}
+hist(gss_old$polviews, col = '', main = 'Hist')
+```
+
+### Hypothesis testing
+
+```{r}
+
+
+pol_data <- gss_old[, c('polviews', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$polviews, pol_data$confed)
+rel_new
+rel_new$observed
+```
+
+```{r}
+pol_data <- gss_combo[, c('prez', 'confed')]
+
+rel_new <- chisq.test(gss_combo$prez, gss_combo$confed)
+rel_new$p.value
+rel_new
+rel_new$observed
+```
+
+
+```{r}
+
 ```
