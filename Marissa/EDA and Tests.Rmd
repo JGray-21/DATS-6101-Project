@@ -1,0 +1,379 @@
+---
+title: "Group Project"
+author: "Marissa Mowers"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r, echo=TRUE}
+
+library(kableExtra)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(knitr)
+library(ezids)
+
+
+gss74 <- gss_get_yr(1974)
+gss75 <- gss_get_yr(1975)
+gss76 <- gss_get_yr(1976)
+gss77 <- gss_get_yr(1977)
+gss78 <- gss_get_yr(1978)
+gss80 <- gss_get_yr(1980)
+
+gss16 <- gss_get_yr(2016)
+gss18 <- gss_get_yr(2018)
+gss21 <- gss_get_yr(2021)
+gss22 <- gss_get_yr(2022)
+```
+
+```{r, echo=TRUE}
+
+common_74_80 <- Reduce(intersect, list(colnames(gss74), colnames(gss75), colnames(gss76), colnames(gss77), colnames(gss78), colnames(gss80)))
+
+common_16_22 <- Reduce(intersect, list(colnames(gss16), colnames(gss18), colnames(gss21), colnames(gss22)))                       
+
+gss74_80 <- rbind(gss74 [common_74_80], gss75 [common_74_80], gss76 [common_74_80], gss77 [common_74_80], gss78 [common_74_80], gss80 [common_74_80])
+
+gss16_22 <- rbind(gss16 [common_16_22], gss18 [common_16_22], gss21 [common_16_22], gss22 [common_16_22])
+
+#New datasets
+gss74_80
+
+gss16_22 
+
+```
+
+
+# EDA of Confidence in the Executive Branch of the Federal Government
+
+## EDA of Confidence in the Executive Branch of the Federal Government from 1974 through 1980.
+
+```{r, echo=TRUE}
+?confed
+
+xkablesummary(gss74_80[, c("confed")])
+missing_cases_confed_74_80 <- sum(is.na(gss74_80$confed))
+valid_cases_confed_74_80 <- sum(!is.na(gss74_80$confed))
+
+names(which.max(table(gss74_80$confed)))
+
+missing_cases_confed_74_80
+valid_cases_confed_74_80
+
+
+gss74_80$confed <- factor(gss74_80$confed, levels = c(1, 2, 3), labels = c("A Great Deal", "Only Some", "Hardly Any"))
+
+str(gss16_22$confed)
+
+ggplot(data=gss74_80, aes(x = confed, color=confed, fill=confed)) + 
+  geom_bar() +
+  labs(x= "Confidence in the Executive Branch of the Federal Government", y= "Frequency") +
+  labs(title = "Bar Graph of Confidence in the Executive Branch from 1974-1980") 
+
+```
+
+## EDA of Confidence in the Executive Branch of the Federal Government from 2016 through 2022.
+```{r, echo=TRUE}
+xkablesummary(gss16_22[, c("confed")])
+missing_cases_confed_16_22 <- sum(is.na(gss16_22$confed))
+valid_cases_confed_16_22 <- sum(!is.na(gss16_22$confed))
+names(which.max(table(gss16_22$confed)))
+
+
+missing_cases_confed_16_22
+valid_cases_confed_16_22
+
+
+gss16_22$confed <- factor(gss16_22$confed, levels = c(1, 2, 3), labels = c("A Great Deal", "Only Some", "Hardly Any"))
+
+ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) + 
+  geom_bar() +
+  labs(x= "Confidence in the Executive Branch of the Federal Government", y= "Frequency") +
+  labs(title = "Bar Graph of Confidence in the Executive Branch from 2016-2022") 
+```
+
+
+# EDA of Sex
+
+## EDA of Sex from 1974 through 1980.
+
+
+```{r, echo=TRUE}
+xkablesummary(gss74_80[, c("sex")])
+missing_cases_sex_74_80 <- sum(is.na(gss74_80$sex))
+valid_cases_sex_74_80 <- sum(!is.na(gss74_80$sex))
+names(which.max(table(gss74_80$sex)))
+
+
+missing_cases_sex_74_80
+valid_cases_sex_74_80
+
+gss74_80$sex <- factor(gss74_80$sex, levels = c(1, 2), labels = c("Male", "Female"))
+
+str(gss74_80$sex)
+
+ggplot(data=gss74_80, aes(x = sex, color=sex, fill=sex)) + 
+  geom_bar() +
+  labs(x= "Sex", y= "Frequency") +
+  labs(title = "Bar Graph of Sex Distribution from 1974 Through 1980") 
+```
+
+## EDA of Sex from 2016 through 2022.
+
+
+```{r, echo=TRUE}
+xkablesummary(gss16_22[, c("sex")])
+missing_cases_sex_16_22 <- sum(is.na(gss16_22$sex))
+valid_cases_sex_16_22 <- sum(!is.na(gss16_22$sex))
+missing_cases_sex_16_22
+valid_cases_sex_16_22
+names(which.max(table(gss16_22$sex)))
+
+
+gss16_22$sex <- factor(gss16_22$sex, levels = c(1, 2), labels = c("Male", "Female"))
+
+str(gss16_22$sex)
+
+ggplot(data=gss16_22, aes(x = sex, color=sex, fill=sex)) + 
+  geom_bar() +
+  labs(x= "Sex", y= "Frequency") +
+  labs(title = "Bar Graph of Sex Distribution from 2016 Through 2022") 
+```
+
+
+# EDA of Race
+
+## EDA of Race from 1974 through 1980.
+
+
+```{r, echo=TRUE}
+xkablesummary(gss74_80[, c("race")])
+missing_cases_race_74_80 <- sum(is.na(gss74_80$race))
+valid_cases_race_74_80 <- sum(!is.na(gss74_80$race))
+names(which.max(table(gss74_80$race)))
+
+
+missing_cases_race_74_80
+valid_cases_race_74_80
+
+gss74_80$race <- factor(gss74_80$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
+
+str(gss74_80$race)
+
+ggplot(data=gss74_80, aes(x = race, color=race, fill=race)) + 
+  geom_bar() +
+  labs(x= "Race", y= "Frequency") +
+  labs(title = "Bar Graph of Race Distribution from 1974 Through 1980") 
+```
+
+
+## EDA of Race from 2016 through 2022.
+
+
+```{r, echo=TRUE}
+xkablesummary(gss16_22[, c("race")])
+missing_cases_race_16_22 <- sum(is.na(gss16_22$race))
+valid_cases_race_16_22 <- sum(!is.na(gss16_22$race))
+names(which.max(table(gss16_22$race)))
+
+
+missing_cases_race_16_22
+valid_cases_race_16_22
+
+gss16_22$race <- factor(gss16_22$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
+
+str(gss16_22$race)
+
+ggplot(data=gss16_22, aes(x = race, color=race, fill=race)) + 
+  geom_bar() +
+  labs(x= "Race", y= "Frequency") +
+  labs(title = "Bar Graph of Race Distribution from 2016 Through 2022") 
+```
+
+# Chi-Squared Test 
+
+
+
+#Confidence in the Executive Branch of the Federal Government vs. Sex
+
+## 1974 through 1980
+
+
+```{r, echo=TRUE}
+confed_sex_table <- table(gss74_80$confed, gss74_80$sex)
+
+confed_sex_chi <- chisq.test(confed_sex_table)
+
+kable(confed_sex_table, caption = "Contingency Table: Confidence in Executive Branch vs. Sex (1974-1980)") %>%
+  kable_styling(full_width = FALSE)
+
+confed_sex_chi
+
+```
+
+
+## 2016 through 2022
+
+
+```{r, echo=TRUE}
+confed_sex_table <- table(gss16_22$confed, gss16_22$sex)
+
+confed_sex_chi <- chisq.test(confed_sex_table)
+
+kable(confed_sex_table, caption = "Contingency Table: Confidence in Executive Branch vs. Sex") %>%
+  kable_styling(full_width = FALSE)
+
+confed_sex_chi
+
+```
+
+# Confidence in the Executive Branch of the Federal Government vs. Race
+
+## 1974 through 1980
+
+
+```{r, echo=TRUE}
+confed_race_table <- table(gss74_80$confed, gss74_80$race)
+
+confed_race_chi <- chisq.test(confed_race_table)
+
+kable(confed_race_table, caption = "Contingency Table: Confidence in Executive Branch vs. Race (1974-1980)") %>%
+  kable_styling(full_width = FALSE)
+
+confed_race_chi
+
+```
+
+## 2016 through 2022
+
+
+```{r, echo=TRUE}
+confed_race_table <- table(gss16_22$confed, gss16_22$race)
+confed_race_chi <- chisq.test(confed_race_table)
+
+kable(confed_race_table, caption = "Contingency Table: Confidence in Executive Branch vs. Race") %>%
+  kable_styling(full_width = FALSE)
+
+confed_race_chi
+
+```
+
+
+# Confidence in the Executive Branch of the Federal Government vs. Religion
+
+## 1974 through 1980
+
+
+```{r, echo=TRUE}
+confed_religion_table <- table(gss74_80$confed, gss74_80$relig)
+
+confed_religion_chi <- chisq.test(confed_religion_table)
+
+kable(confed_religion_table, caption = "Contingency Table: Confidence in Executive Branch vs. Religion (1974-1980)") %>%
+  kable_styling(full_width = FALSE)
+
+confed_religion_chi
+
+```
+
+## 2016 through 2022
+
+
+```{r, echo=TRUE}
+confed_religion_table <- table(gss16_22$confed, gss16_22$relig)
+confed_religion_chi <- chisq.test(confed_religion_table)
+
+kable(confed_religion_table, caption = "Contingency Table: Confidence in Executive Branch vs. Religion") %>%
+  kable_styling(full_width = FALSE)
+
+confed_religion_chi
+
+```
+
+```{r, echo=TRUE}
+gss74_80$relig <- factor(gss74_80$relig, 
+                            levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 
+                            labels = c("Protestant", "Catholic", "Jewish", "None", "Other", "Other", "Other", "Other", "Other", "Other", "Other", "Other", "Other"))
+
+table(gss74_80$relig)
+
+gss16_22$relig <- factor(gss16_22$relig, 
+                            levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), 
+                            labels = c("Protestant", "Catholic", "Jewish", "None", "Other", "Other", "Other", "Other", "Other", "Other", "Other", "Other", "Other"))
+
+table(gss16_22$relig)
+```
+
+
+# Confidence in the Executive Branch of the Federal Government vs. Religion - RECODED
+
+## 1974 through 1980 - RECODED
+
+
+```{r, echo=TRUE}
+confed_religion_table <- table(gss74_80$confed, gss74_80$relig)
+
+confed_religion_chi <- chisq.test(confed_religion_table)
+
+kable(confed_religion_table, caption = "Contingency Table: Confidence in Executive Branch vs. Religion (1974-1980)") %>%
+  kable_styling(full_width = FALSE)
+
+confed_religion_chi
+
+```
+
+
+## 2016 through 2022 - RECODED
+
+
+```{r, echo=TRUE}
+confed_religion_table <- table(gss16_22$confed, gss16_22$relig)
+confed_religion_chi <- chisq.test(confed_religion_table)
+
+kable(confed_religion_table, caption = "Contingency Table: Confidence in Executive Branch vs. Religion") %>%
+  kable_styling(full_width = FALSE)
+
+confed_religion_chi
+
+```
+
+#EDA for Vaijayanti
+```{r, echo=TRUE}
+sum(is.na(gss74_80$age))
+sum(!is.na(gss74_80$age))
+names(which.max(table(gss74_80$age)))
+xkablesummary(gss74_80[, c("age")])
+
+
+sum(is.na(gss16_22$age))
+sum(!is.na(gss16_22$age))
+names(which.max(table(gss16_22$age)))
+xkablesummary(gss16_22[, c("age")])
+
+
+sum(is.na(gss74_80$income))
+sum(!is.na(gss74_80$income))
+names(which.max(table(gss74_80$income)))
+xkablesummary(gss74_80[, c("income")])
+
+
+sum(is.na(gss16_22$income16))
+sum(!is.na(gss16_22$income16))
+names(which.max(table(gss16_22$income16)))
+xkablesummary(gss16_22[, c("income16")])
+
+ 
+
+```
