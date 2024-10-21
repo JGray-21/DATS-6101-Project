@@ -377,3 +377,270 @@ xkablesummary(gss16_22[, c("income16")])
  
 
 ```
+
+
+```{r, echo=TRUE}
+#convert variables to factors with labels
+gss74_80$region <- factor(gss74_80$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+
+gss16_22$region <- factor(gss16_22$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+```
+
+```{r}
+# Encoding variables
+gss16_22$relig <- case_when(
+  gss16_22$relig == 1 ~ 'Protestant',
+  gss16_22$relig == 2 ~ 'Catholic',
+  gss16_22$relig == 3 ~ 'Jewish',
+  gss16_22$relig == 4 ~ 'None',
+  gss16_22$relig == 5 ~ 'Other',
+  gss16_22$relig == 6 ~ 'Other',
+  gss16_22$relig == 7 ~ 'Other',
+  gss16_22$relig == 8 ~ 'Other',
+  gss16_22$relig == 9 ~ 'Other',
+  gss16_22$relig == 10 ~ 'Other',
+  gss16_22$relig == 11 ~ 'Other',
+  gss16_22$relig == 12 ~ 'Other',
+  gss16_22$relig == 13 ~ 'Other',
+  TRUE ~ NA
+)
+
+gss74_80$relig <- case_when(
+  gss74_80$relig == 1 ~ 'Protestant',
+  gss74_80$relig == 2 ~ 'Catholic',
+  gss74_80$relig == 3 ~ 'Jewish',
+  gss74_80$relig == 4 ~ 'None',
+  gss74_80$relig == 5 ~ 'Other',
+  gss74_80$relig == 6 ~ 'Other',
+  gss74_80$relig == 7 ~ 'Other',
+  gss74_80$relig == 8 ~ 'Other',
+  gss74_80$relig == 9 ~ 'Other',
+  gss74_80$relig == 10 ~ 'Other',
+  gss74_80$relig == 11 ~ 'Other',
+  gss74_80$relig == 12 ~ 'Other',
+  gss74_80$relig == 13 ~ 'Other',
+  TRUE ~ NA
+)
+
+gss16_22$income16 <- factor(gss16_22$income16, levels = c(1:25), labels = c('Low','Low','Low','Low','Low','Low','Low','Low', 'Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle', 'Middle','Middle','Middle','Middle','Middle', 'Upper-Middle','Upper-Middle', 'High', 'High', 'High'))
+```
+
+# Region (region)
+
+### Description
+
+Here is a map of the country divided into the corresponding regions
+
+![US Regions](US_Regions.png)
+
+### Distribution
+
+```{r}
+#Plot histograms
+ggplot(gss74_80, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 1974-1980", x="Region")
+ggplot(gss16_22, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 2016-2022", x="Region")
+```
+
+### Summary
+
+The most frequent region in the 1974 through 1980 is `r names(which.max(table(gss74_80$region)))`. The most frequent region in 2016 through 2022 is `r names(which.max(table(gss16_22$region)))`. The least frequent region in the 1974 through 1980 is `r names(which.min(table(gss74_80$region)))`. And the least frequent region in the 2016 through 2022 is `r names(which.min(table(gss16_22$region)))`.
+
+```{r, echo=TRUE}
+sum(is.na(gss74_80$region))
+sum(!is.na(gss74_80$region))
+names(which.max(table(gss74_80$region)))
+xkablesummary(gss74_80[, c("region")])
+
+sum(is.na(gss16_22$region))
+sum(!is.na(gss16_22$region))
+names(which.max(table(gss16_22$region)))
+xkablesummary(gss16_22[, c("region")])
+
+```
+
+### Hypothesis Test (1974-1980)
+
+```{r}
+pol_data <- gss74_80[, c('region', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$region, pol_data$confed)
+rel_new
+rel_new$observed
+```
+
+### Hypothesis Test (2016-2022)
+
+```{r}
+pol_data <- gss16_22[, c('region', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$region, pol_data$confed)
+rel_new
+rel_new$observed
+```
+
+### Conclusion
+
+The p-value for the chi-square test of the older time interval indicates that there was a significant relationship between which region a respondent lived in and how they felt about the executive branch. We can neglect the null hypothesis that there is no statistical significance there. However, that is not the case for the more recent time interval. The p-value is greater than 0.05 which means we cannot reject the null hypothesis for the years 2016 through 2022.
+
+---
+
+# Religion (relig)
+
+### Description
+
+There are several more religions listed in the newer surveys. We decided to combine the smaller religions into one bucket called "Other" in order to more closely resemble the older surveys.
+
+### Distribution
+
+```{r}
+ggplot(gss74_80, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="count") + labs(title = "Religion 1974-1980", x="Religion")
+ggplot(gss16_22, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="count") + labs(title = "Religion 2016-2022", x="Religion")
+```
+
+### Summary
+
+The most frequent religion in the early surveys is `r names(which.max(table(gss74_80$relig)))`. The most frequent religion in the recent surveys is `r names(which.max(table(gss16_22$relig)))`.
+
+```{r, echo=TRUE}
+sum(is.na(gss74_80$relig))
+sum(!is.na(gss74_80$relig))
+names(which.max(table(gss74_80$relig)))
+xkablesummary(gss74_80[, c("relig")])
+
+sum(is.na(gss16_22$relig))
+sum(!is.na(gss16_22$relig))
+names(which.max(table(gss16_22$relig)))
+xkablesummary(gss16_22[, c("relig")])
+
+```
+
+
+### Hypothesis Test (1974 - 1980)
+
+```{r}
+pol_data <- gss74_80[, c('relig', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_old <- chisq.test(pol_data$relig, pol_data$confed)
+rel_old
+rel_old$observed
+```
+
+### Hypothesis Test (2016 - 2022)
+
+```{r}
+pol_data <- gss16_22[, c('relig', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_new <- chisq.test(pol_data$relig, pol_data$confed)
+rel_new
+rel_new$observed
+```
+
+### Conclusion
+
+As a result of our hypothesis tests for religion, we can reject the null hypothesis and claim that there is a significant relationship between a respondent's religion and how they feel about our executive branch.
+
+---
+
+# Political Spectrum (polviews)
+
+### Descrpition
+
+For this variable, respondents list where they fall on the political spectrum between extremely conservative and extremely progressive.
+
+### Distribuion
+
+```{r, echo=FALSE}
+ggplot(gss74_80, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
+
+            
+ggplot(gss16_22, aes(x=polviews, fill='red')) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
+```
+
+### Summary
+
+The average value for political placement in the early surveys is `r mean(gss74_80$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss16_22$polviews, na.rm=T)`.
+
+```{r, echo=TRUE}
+sum(is.na(gss74_80$polviews))
+sum(!is.na(gss74_80$polviews))
+names(which.max(table(gss74_80$polviews)))
+xkablesummary(gss74_80[, c("polviews")])
+
+sum(is.na(gss16_22$polviews))
+sum(!is.na(gss16_22$polviews))
+names(which.max(table(gss16_22$polviews)))
+xkablesummary(gss16_22[, c("polviews")])
+
+```
+
+### Hypothesis testing (1974 - 1980)
+
+```{r}
+pol_data <- gss74_80[, c('polviews', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_old <- chisq.test(pol_data$polviews, pol_data$confed)
+rel_old
+rel_old$observed
+```
+
+### Hypothesis testing (2016 - 2022)
+
+```{r}
+pol_data <- gss16_22[, c('polviews', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
+
+rel_old <- chisq.test(pol_data$polviews, pol_data$confed)
+rel_old
+rel_old$observed
+```
+
+### Conclusion
+
+From our chi-squared tests here, both p-values indicate a significant relationship between how a respondent identifies and how they feel about the executive branch of the government.
+
+
+# Education
+
+### Mean, Median, and Mode
+
+The most frequent education in the 1974 through 1980 is `r names(which.max(table(gss_old$educ)))`. 
+The most frequent education in the 2016 through 2022 is `r names(which.max(table(gss_new$educ)))`.
+The least frequent education in the 1974 through 1980 is `r names(which.min(table(gss_old$educ)))`. 
+And the least frequent education in the 2016 through 2022 is `r names(which.min(table(gss_new$educ)))`.
+
+### Distribution
+
+```{r}
+
+library(ggplot2)
+
+
+# Plot bar charts for education levels in the older dataset (1974-1980)
+
+library(ggplot2)
+
+ggplot(gss_old, aes(x = educ, color = educ)) + 
+  geom_bar(position = "dodge", fill = "coral") + 
+  labs(title = "Education Distribution (1974-1980)", x = "Education Level", y = "Count") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+
+ggplot(gss_old, aes(x = educ, color = educ)) + 
+  geom_bar(position = "dodge", fill = "lightpink") + 
+  labs(title = "Education Distribution (2016-2022)", x = "Education Level", y = "Count") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+
+```
+
+
+### Mode
+The most frequent education in the early surveys is  `r names(which.max(table(gss_old$educ)))`. 
+The most frequent education in the recent surveys is `r names(which.max(table(gss_new$educ)))`.
+
+
