@@ -15,7 +15,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, echo = TRUE)
 library(gssr)
 library(gssrdoc)
 library(ggplot2)
@@ -32,14 +32,6 @@ gss_old <- read.csv("../gss74_80.csv")
 gss_old <- gss_old[, vars1]
 gss_new <- read.csv("../gss16_22.csv")
 gss_new <- gss_new[, vars2]
-
-
-summary(gss_old$region)
-summary(gss_new$region)
-summary(gss_old$relig)
-summary(gss_new$relig)
-summary(gss_old$polviews)
-summary(gss_new$polviews)
 ```
 
 ```{r}
@@ -50,7 +42,7 @@ gss_new$region <- factor(gss_new$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), 
 ```
 
 ```{r}
-# Change religion buckets 
+# Encoding variables
 gss_new$relig <- case_when(
   gss_new$relig == 1 ~ 'Protestant',
   gss_new$relig == 2 ~ 'Catholic',
@@ -88,53 +80,13 @@ gss_old$relig <- case_when(
 gss_new$income16 <- factor(gss_new$income16, levels = c(1:25), labels = c('Low','Low','Low','Low','Low','Low','Low','Low', 'Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle', 'Middle','Middle','Middle','Middle','Middle', 'Upper-Middle','Upper-Middle', 'High', 'High', 'High'))
 ```
 
-
-```{r}
-ggplot(gss_new, aes(x=income16, color=income16, fill=income16)) + geom_histogram(stat="count") + labs(title = "Income 2016-2022", x="Income Level")
-```
-```{r}
-pol_data <- gss_new[, c('income16', 'confed')]
-pol_data <- pol_data[complete.cases(pol_data),]
-
-rel_new <- chisq.test(pol_data$confed, pol_data$income16)
-rel_new
-rel_new$observed
-```
-
-```{r}
-# Combine two tables into one
-#gss_combo <- rbind(gss_old, gss_new)
-gss_combo$prez <- case_when(
-  gss_combo$year == 1974 ~ 'r',
-  gss_combo$year == 1975 ~ 'r',
-  gss_combo$year == 1976 ~ 'r',
-  gss_combo$year == 1977 ~ 'd',
-  gss_combo$year == 1978 ~ 'd',
-  gss_combo$year == 1980 ~ 'd',
-  gss_combo$year == 2016 ~ 'r',
-  gss_combo$year == 2018 ~ 'r',
-  gss_combo$year == 2021 ~ 'd',
-  gss_combo$year == 2022 ~ 'd',
-)
-```
-
-```{r}
-#unique(gss_combo$year)
-```
-
 # Region (region)
 
 ### Description
+
 Here is a map of the country devided into its regions
 
 ![US Regions](US_Regions.png)
-
-### Mean, Median, and Mode
-
-The most frequent region in the 70s is `r names(which.max(table(gss_old$region)))`. 
-The most frequent region in the 20s is `r names(which.max(table(gss_new$region)))`.
-The least frequent region in the 70's is `r names(which.min(table(gss_old$region)))`. 
-And the least frequent region in the 20s is `r names(which.min(table(gss_new$region)))`.
 
 ### Distribution
 
@@ -143,33 +95,23 @@ And the least frequent region in the 20s is `r names(which.min(table(gss_new$reg
 ggplot(gss_old, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 1974-1980", x="Region")
 ggplot(gss_new, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 2016-2022", x="Region")
 ```
-```{r}
-ggplot(gss_new, aes(x=age)) + geom_histogram(binwidth = 5, stat="count") + labs(title = "Region 2016-2022", x="Region")
-```
-```{r}
-unique(gss_old$age)
-```
 
-**Relevence??**
+### Summary
 
-***
+The most frequent region in the 70s is `r names(which.max(table(gss_old$region)))`. The most frequent region in the 20s is `r names(which.max(table(gss_new$region)))`. The least frequent region in the 70's is `r names(which.min(table(gss_old$region)))`. And the least frequent region in the 20s is `r names(which.min(table(gss_new$region)))`.
 
-### Hypothesis Tests
+### Hypothesis Test (1974-1980)
+
 ```{r}
 pol_data <- gss_old[, c('region', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
-rel_old <- chisq.test(pol_data$region, pol_data$confed)
-rel_old
-rel_old$observed
-
-pol_data <- gss_new[, c('region', 'confed')]
-pol_data <- pol_data[complete.cases(pol_data),]
-
-rel_old <- chisq.test(pol_data$region, pol_data$confed)
-rel_old
-rel_old$observed
+rel_new <- chisq.test(pol_data$region, pol_data$confed)
+rel_new
+rel_new$observed
 ```
+
+### Hypothesis Test (2016-2022)
 
 ```{r}
 pol_data <- gss_new[, c('region', 'confed')]
@@ -180,25 +122,32 @@ rel_new
 rel_new$observed
 ```
 
+### Conclusion
+
+The p-value for the chi-square test of the older time interval indicates that there was a significant relationship between which region a respondent lived in and how they felt about the executive branch. We can neglect the null hypothesis that there is no statistical significance there. However, that is not the case for the more recent time interval. The p-value is greater than 0.05 which means we cannot reject the null hypothesis for the years 2016 through 2022.
+
+---
+
 # Religion (relig)
 
-### Descrpition
-There are several more religions listed in the newer surveys. We decided to combine the smaller religions into one bucket called "Other" in order to more closely resemble the older surveys. 
+### Description
 
-### Mean, Median, Mode
-The most frequent religion in the early surveys is  `r names(which.max(table(gss_old$relig)))`. 
-The most frequent religion in the recent surveys is `r names(which.max(table(gss_new$relig)))`.
+There are several more religions listed in the newer surveys. We decided to combine the smaller religions into one bucket called "Other" in order to more closely resemble the older surveys.
 
-### Distribuion
+### Distribution
 
 ```{r}
 ggplot(gss_old, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="count") + labs(title = "Religion 1974-1980", x="Religion")
 ggplot(gss_new, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="count") + labs(title = "Religion 2016-2022", x="Religion")
 ```
 
-**Relevence?**
+### Summary
 
-### Hypothesis Test
+The most frequent religion in the early surveys is `r names(which.max(table(gss_old$relig)))`. The most frequent religion in the recent surveys is `r names(which.max(table(gss_new$relig)))`.
+
+
+### Hypothesis Test (1974 - 1980)
+
 ```{r}
 pol_data <- gss_old[, c('relig', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
@@ -206,7 +155,11 @@ pol_data <- pol_data[complete.cases(pol_data),]
 rel_old <- chisq.test(pol_data$relig, pol_data$confed)
 rel_old
 rel_old$observed
+```
 
+### Hypothesis Test (2016 - 2022)
+
+```{r}
 pol_data <- gss_new[, c('relig', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -215,56 +168,55 @@ rel_new
 rel_new$observed
 ```
 
-***
+### Conclusion
+
+As a result of our hypothesis tests for religion, we can reject the null hypothesis and claim that there is a significant relationship between a respondent's religion and how they feel about our executive branch.
+
+---
 
 # Political Spectrum (polviews)
 
 ### Descrpition
-For this variable, respondents list where they fall on the political spectrum between extremely conservative and extremely progressive. 
 
-### Mean, Median, Mode
-The average value for political placement in the early surveys is `r mean(gss_old$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss_new$polviews, na.rm=T)`.
+For this variable, respondents list where they fall on the political spectrum between extremely conservative and extremely progressive.
 
 ### Distribuion
 
-```{r}
-qqnorm(gss_old$polviews[!is.na(gss_old$polviews)])
-qqline(gss_old$polviews[!is.na(gss_old$polviews)])
-qqnorm(gss_new$polviews[!is.na(gss_new$polviews)])
-qqline(gss_new$polviews[!is.na(gss_new$polviews)])
+```{r, echo=FALSE}
+ggplot(gss_old, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
 
-y <- ggplot(gss_old, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
-y + scale_fill_manual(values = c('red'))
             
-ggplot(gss_new, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
-```
-```{r}
-hist(gss_old$polviews, col = '', main = 'Hist')
+ggplot(gss_new, aes(x=polviews, fill='red')) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
 ```
 
-### Hypothesis testing
+### Summary
+
+The average value for political placement in the early surveys is `r mean(gss_old$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss_new$polviews, na.rm=T)`.
+
+
+
+### Hypothesis testing (1974 - 1980)
 
 ```{r}
-
-
 pol_data <- gss_old[, c('polviews', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
-rel_new <- chisq.test(pol_data$polviews, pol_data$confed)
-rel_new
-rel_new$observed
+rel_old <- chisq.test(pol_data$polviews, pol_data$confed)
+rel_old
+rel_old$observed
 ```
+
+### Hypothesis testing (2016 - 2022)
 
 ```{r}
-pol_data <- gss_combo[, c('prez', 'confed')]
+pol_data <- gss_new[, c('polviews', 'confed')]
+pol_data <- pol_data[complete.cases(pol_data),]
 
-rel_new <- chisq.test(gss_combo$prez, gss_combo$confed)
-rel_new$p.value
-rel_new
-rel_new$observed
+rel_old <- chisq.test(pol_data$polviews, pol_data$confed)
+rel_old
+rel_old$observed
 ```
 
+### Conclusion
 
-```{r}
-
-```
+From our chi-squared tests here, both p-values indicate a significant relationship between how a respondent identifies and how they feel about the executive branch of the government.
