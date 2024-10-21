@@ -84,7 +84,7 @@ gss_new$income16 <- factor(gss_new$income16, levels = c(1:25), labels = c('Low',
 
 ### Description
 
-Here is a map of the country devided into its regions
+Here is a map of the country divided into its regions
 
 ![US Regions](US_Regions.png)
 
@@ -126,13 +126,13 @@ rel_new$observed
 
 The p-value for the chi-square test of the older time interval indicates that there was a significant relationship between which region a respondent lived in and how they felt about the executive branch. We can neglect the null hypothesis that there is no statistical significance there. However, that is not the case for the more recent time interval. The p-value is greater than 0.05 which means we cannot reject the null hypothesis for the years 2016 through 2022.
 
----
+------------------------------------------------------------------------
 
 # Religion (relig)
 
 ### Description
 
-There are several more religions listed in the newer surveys. We decided to combine the smaller religions into one bucket called "Other" in order to more closely resemble the older surveys.
+There are several more religions listed in the newer surveys. We decided to combine the less frequent religions into one bucket called "Other" in order to more closely resemble the older surveys.
 
 ### Distribution
 
@@ -143,8 +143,7 @@ ggplot(gss_new, aes(x=relig, color=relig, fill=relig)) + geom_histogram(stat="co
 
 ### Summary
 
-The most frequent religion in the early surveys is `r names(which.max(table(gss_old$relig)))`. The most frequent religion in the recent surveys is `r names(which.max(table(gss_new$relig)))`.
-
+The most frequent religion in the early surveys is `r names(which.max(table(gss_old$relig)))`. The most frequent religion in the recent surveys is `r names(which.max(table(gss_new$relig)))`. While protestant is the most common religion for both time intervals, we see an increase to all other religions in the recent surveys.
 
 ### Hypothesis Test (1974 - 1980)
 
@@ -172,13 +171,13 @@ rel_new$observed
 
 As a result of our hypothesis tests for religion, we can reject the null hypothesis and claim that there is a significant relationship between a respondent's religion and how they feel about our executive branch.
 
----
+------------------------------------------------------------------------
 
 # Political Spectrum (polviews)
 
 ### Descrpition
 
-For this variable, respondents list where they fall on the political spectrum between extremely conservative and extremely progressive.
+For this variable, respondents give a number between 1 and 7 according to where they fall on the political spectrum with 1 being extremely progressive and 7 being extremely conservative.
 
 ### Distribuion
 
@@ -191,9 +190,7 @@ ggplot(gss_new, aes(x=polviews, fill='red')) + geom_histogram(stat="count", show
 
 ### Summary
 
-The average value for political placement in the early surveys is `r mean(gss_old$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss_new$polviews, na.rm=T)`.
-
-
+The average value for political placement in the older surveys is `r mean(gss_old$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss_new$polviews, na.rm=T)`. While the vast majority of respondents identified as moderate in both time intervals, the size of each extreme group grew substantially. This indicates a much more polarized political landscape in recent years which might account for the growth in negative sentiment towards the government.
 
 ### Hypothesis testing (1974 - 1980)
 
