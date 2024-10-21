@@ -67,6 +67,8 @@ xkablesummary(gss74_80[, c("confed")])
 missing_cases_confed_74_80 <- sum(is.na(gss74_80$confed))
 valid_cases_confed_74_80 <- sum(!is.na(gss74_80$confed))
 
+names(which.max(table(gss74_80$confed)))
+
 missing_cases_confed_74_80
 valid_cases_confed_74_80
 
@@ -87,6 +89,8 @@ ggplot(data=gss74_80, aes(x = confed, color=confed, fill=confed)) +
 xkablesummary(gss16_22[, c("confed")])
 missing_cases_confed_16_22 <- sum(is.na(gss16_22$confed))
 valid_cases_confed_16_22 <- sum(!is.na(gss16_22$confed))
+names(which.max(table(gss16_22$confed)))
+
 
 missing_cases_confed_16_22
 valid_cases_confed_16_22
@@ -110,6 +114,8 @@ ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) +
 xkablesummary(gss74_80[, c("sex")])
 missing_cases_sex_74_80 <- sum(is.na(gss74_80$sex))
 valid_cases_sex_74_80 <- sum(!is.na(gss74_80$sex))
+names(which.max(table(gss74_80$sex)))
+
 
 missing_cases_sex_74_80
 valid_cases_sex_74_80
@@ -133,6 +139,8 @@ missing_cases_sex_16_22 <- sum(is.na(gss16_22$sex))
 valid_cases_sex_16_22 <- sum(!is.na(gss16_22$sex))
 missing_cases_sex_16_22
 valid_cases_sex_16_22
+names(which.max(table(gss16_22$sex)))
+
 
 gss16_22$sex <- factor(gss16_22$sex, levels = c(1, 2), labels = c("Male", "Female"))
 
@@ -154,6 +162,8 @@ ggplot(data=gss16_22, aes(x = sex, color=sex, fill=sex)) +
 xkablesummary(gss74_80[, c("race")])
 missing_cases_race_74_80 <- sum(is.na(gss74_80$race))
 valid_cases_race_74_80 <- sum(!is.na(gss74_80$race))
+names(which.max(table(gss74_80$race)))
+
 
 missing_cases_race_74_80
 valid_cases_race_74_80
@@ -176,6 +186,8 @@ ggplot(data=gss74_80, aes(x = race, color=race, fill=race)) +
 xkablesummary(gss16_22[, c("race")])
 missing_cases_race_16_22 <- sum(is.na(gss16_22$race))
 valid_cases_race_16_22 <- sum(!is.na(gss16_22$race))
+names(which.max(table(gss16_22$race)))
+
 
 missing_cases_race_16_22
 valid_cases_race_16_22
@@ -334,5 +346,34 @@ kable(confed_religion_table, caption = "Contingency Table: Confidence in Executi
   kable_styling(full_width = FALSE)
 
 confed_religion_chi
+
+```
+
+#EDA for Vaijayanti
+```{r, echo=TRUE}
+sum(is.na(gss74_80$age))
+sum(!is.na(gss74_80$age))
+names(which.max(table(gss74_80$age)))
+xkablesummary(gss74_80[, c("age")])
+
+
+sum(is.na(gss16_22$age))
+sum(!is.na(gss16_22$age))
+names(which.max(table(gss16_22$age)))
+xkablesummary(gss16_22[, c("age")])
+
+
+sum(is.na(gss74_80$income))
+sum(!is.na(gss74_80$income))
+names(which.max(table(gss74_80$income)))
+xkablesummary(gss74_80[, c("income")])
+
+
+sum(is.na(gss16_22$income16))
+sum(!is.na(gss16_22$income16))
+names(which.max(table(gss16_22$income16)))
+xkablesummary(gss16_22[, c("income16")])
+
+ 
 
 ```
