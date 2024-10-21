@@ -106,32 +106,22 @@ And the least frequent education in the 20s is `r names(which.min(table(gss_new$
 
 library(ggplot2)
 
-# Histogram for gss_old
-ggplot(gss_old, aes(x = educ, color = region, fill = region)) + 
-  geom_histogram(stat = "Count") + 
-  labs(title = "Education 1974-1980", x = "Education Level") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
-
-# Histogram for gss_new
-ggplot(gss_new, aes(x = educ, color = region, fill = region)) + 
-  geom_histogram(stat = "Count") + 
-  labs(title = "Education 2016-2022", x = "Education Level") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
-
 
 # Plot bar charts for education levels in the older dataset (1974-1980)
-ggplot(gss_old, aes(x = educ, fill = region)) + 
-  geom_bar(color = "blue", position = "dodge") + 
-  labs(title = "Education Distribution (1974-1980)", x = "Education Level", y = "Count") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) +
-  scale_fill_brewer(palette = "Set3") 
 
-# Plot bar charts for education levels in the newer dataset (2016-2022)
-ggplot(gss_new, aes(x = educ, fill = region)) + 
-  geom_bar(color = "blue", position = "dodge") + 
+library(ggplot2)
+
+ggplot(gss_old, aes(x = educ, color = educ)) + 
+  geom_bar(position = "dodge", fill = "coral") + 
+  labs(title = "Education Distribution (1974-1980)", x = "Education Level", y = "Count") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+
+ggplot(gss_old, aes(x = educ, color = educ)) + 
+  geom_bar(position = "dodge", fill = "lightpink") + 
   labs(title = "Education Distribution (2016-2022)", x = "Education Level", y = "Count") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) +
-  scale_fill_brewer(palette = "Set3")  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
 
 ```
 

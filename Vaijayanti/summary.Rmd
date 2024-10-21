@@ -1,0 +1,82 @@
+---
+title: "GSS Hypothesis Analysis"
+author: "Vaijayanti Deshmukh"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r, echo=FALSE, results='asis'}
+cat("
+## Hypothesis Overview
+
+For each of the demographic variables—age, education, and income—analyzed using the General Social Survey (GSS), the hypotheses are structured as follows:
+
+### 1. Age and Confidence in Government
+- **Null Hypothesis (H₀)**: There is no significant relationship between age and confidence in the Executive Branch of the Federal Government.
+- **Alternative Hypothesis (H₁)**: There is a significant relationship between age and confidence in the Executive Branch of the Federal Government.
+
+### 2. Education and Confidence in Government
+- **Null Hypothesis (H₀)**: There is no significant relationship between education level and confidence in the Executive Branch.
+- **Alternative Hypothesis (H₁)**: There is a significant relationship between education level and confidence in the Executive Branch.
+
+### 3. Income and Confidence in Government
+- **Null Hypothesis (H₀)**: There is no significant relationship between income level and confidence in the Executive Branch.
+- **Alternative Hypothesis (H₁)**: There is a significant relationship between income level and confidence in the Executive Branch.
+
+Each of these hypotheses was tested using Chi-square tests of independence to determine whether the relationships between these demographic variables and confidence in the government differed across two time periods: **1974-1980** and **2016-2022**.
+
+## Summary of Findings: Trends in Public Confidence in the Executive Branch
+
+### 1. Age and Confidence in the Executive Branch
+#### 1974-1980:
+- Across all age groups, around 55% of respondents reported 'Only Some' confidence.
+- Older individuals (65+) showed higher trust, with nearly 19.5% expressing 'A Great Deal' of confidence, while younger respondents (under 25) were more skeptical.
+- Trust increased with age, possibly due to older generations identifying more with traditional authority.
+
+#### 2016-2022:
+- A dramatic shift occurred: around 45% of respondents across all age groups expressed 'Hardly Any' confidence, reflecting a general decline in trust.
+- Even the older population (65+) saw 46% expressing 'Hardly Any' confidence, indicating an erosion of trust across generations.
+
+### 2. Education and Confidence in the Executive Branch
+#### 1974-1980:
+- Education influenced trust levels: 55% across all education levels reported 'Only Some' confidence.
+- Those with lower education levels showed more trust: 16-18% reported 'A Great Deal' of confidence compared to those with higher education.
+- Graduate-level respondents had the lowest 'Hardly Any' confidence (25.8%), suggesting a more optimistic outlook.
+
+#### 2016-2022:
+- Trust eroded across education levels, with only 11.6% reporting 'A Great Deal' of confidence.
+- College graduates had slightly higher trust (14%), but 'Hardly Any' confidence surged to 43-49% across all education groups.
+
+**Key Insight**:  
+Education no longer correlates with higher trust. Instead, skepticism has grown, pointing to systemic factors like declining institutional credibility.
+
+### 3. Income and Confidence in the Executive Branch
+#### 1974-1980:
+- The middle-income group showed the highest trust, with 14.95% expressing 'A Great Deal' of confidence.
+- Surprisingly, high-income individuals showed slightly lower trust (14.56%).
+- 55% across all income groups expressed 'Only Some' confidence, reflecting moderate trust.
+
+#### 2016-2022:
+- Trust declined across all income levels, with only 11.45% reporting 'A Great Deal' of confidence.
+- The high-income group retained the highest trust (14.52%) but lower than the earlier period.
+- 'Hardly Any' confidence rose dramatically across all groups, from 42% to 47%.
+
+**Insight**:  
+Even wealthier individuals have lost trust, indicating that economic status alone does not shield against disillusionment with government performance.
+
+## Decline in Trust Across All Demographics
+Trust has eroded across age, education, and income groups. Even traditionally trusting demographics like older adults and high-income earners have shown increasing skepticism.
+
+## Changing Patterns Across Generations
+Older generations (65+) continue to express more trust, but younger cohorts (under 45) show growing detachment from traditional political authority.
+
+## Education No Longer Predicts Trust
+While education once correlated with higher trust, the 2016-2022 data shows increased skepticism even among the highly educated, driven by systemic factors affecting public opinion.
+
+## Impact of Economic and Political Contexts
+External factors such as political instability, leadership changes, and economic challenges may have driven these trends.
+
+## Future Analysis
+- Investigate how confidence levels correlate with the identity or performance of sitting presidents.
+- Explore variations in confidence across geographic regions and political ideologies.
+")
