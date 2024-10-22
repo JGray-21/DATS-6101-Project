@@ -1934,80 +1934,9 @@ data.</p>
 </div>
 <div id="eda-of-confidence-in-the-executive-branch-19741980" class="section level2">
 <h2>EDA of Confidence in the Executive Branch (1974–1980)</h2>
-<pre class="r"><code>gss74_80$confed &lt;- factor(gss74_80$confed, levels = c(1, 2, 3), labels = c(&quot;A Great Deal&quot;, &quot;Only Some&quot;, &quot;Hardly Any&quot;))</code></pre>
-<pre class="r"><code>xkablesummary(gss16_22[, c(&quot;confed&quot;)])</code></pre>
-<table class="table table-striped" style="width: auto !important; ">
-<caption>
-Table: Statistics summary.
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-confed
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Min
-</td>
-<td style="text-align:left;">
-Min. :1.000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Q1
-</td>
-<td style="text-align:left;">
-1st Qu.:2.000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Median
-</td>
-<td style="text-align:left;">
-Median :2.000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Mean
-</td>
-<td style="text-align:left;">
-Mean :2.328
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Q3
-</td>
-<td style="text-align:left;">
-3rd Qu.:3.000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Max
-</td>
-<td style="text-align:left;">
-Max. :3.000
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA’s :4551
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="r"><code>gss74_80$confed &lt;- factor(gss74_80$confed, 
+                          levels = c(1, 2, 3), 
+                          labels = c(&quot;A Great Deal&quot;, &quot;Only Some&quot;, &quot;Hardly Any&quot;))</code></pre>
 <pre class="r"><code>ggplot(data = gss74_80, aes(x = confed, fill = confed)) + 
   geom_bar() + 
   scale_fill_brewer(palette = &quot;Set3&quot;) +  
@@ -2018,56 +1947,9 @@ NA’s :4551
 </div>
 <div id="eda-of-confidence-in-the-executive-branch-20162022" class="section level2">
 <h2>EDA of Confidence in the Executive Branch (2016–2022)</h2>
-<pre class="r"><code>gss16_22$confed &lt;- factor(gss16_22$confed, levels = c(1, 2, 3), labels = c(&quot;A Great Deal&quot;, &quot;Only Some&quot;, &quot;Hardly Any&quot;))</code></pre>
-<pre class="r"><code>xkablesummary(gss16_22[, c(&quot;confed&quot;)])</code></pre>
-<table class="table table-striped" style="width: auto !important; ">
-<caption>
-Table: Statistics summary.
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-confed
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-A Great Deal:1051
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.1
-</td>
-<td style="text-align:left;">
-Only Some :3838
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.2
-</td>
-<td style="text-align:left;">
-Hardly Any :3956
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.3
-</td>
-<td style="text-align:left;">
-NA’s :4551
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="r"><code>gss16_22$confed &lt;- factor(gss16_22$confed, 
+                          levels = c(1, 2, 3), 
+                          labels = c(&quot;A Great Deal&quot;, &quot;Only Some&quot;, &quot;Hardly Any&quot;))</code></pre>
 <pre class="r"><code>ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) + 
   geom_bar() + 
   scale_fill_brewer(palette = &quot;Set3&quot;) + 
@@ -2093,7 +1975,7 @@ strong confidence in the executive branch.</p>
 </div>
 </div>
 <div id="region" class="section level1">
-<h1>Region:</h1>
+<h1>Region</h1>
 <p>Region remained the same: 1 = “New England”, 2 = “Middle Atlantic”, 3
 = “East North Central”, 4 = “West North Central”, 5 = “South Atlantic”,
 6 = “East South Central”, 7 = “West South Central”, 8 = “Mountain”, and
@@ -2620,39 +2502,6 @@ missing, but “Female” remains the mode in both periods.</p>
 <div id="eda-of-sex-19741980" class="section level2">
 <h2>EDA of Sex (1974–1980)</h2>
 <pre class="r"><code>gss74_80$sex &lt;- factor(gss74_80$sex, levels = c(1, 2), labels = c(&quot;Male&quot;, &quot;Female&quot;))</code></pre>
-<pre class="r"><code>xkablesummary(gss74_80[, c(&quot;sex&quot;)])</code></pre>
-<table class="table table-striped" style="width: auto !important; ">
-<caption>
-Table: Statistics summary.
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-sex
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-Male :4007
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.1
-</td>
-<td style="text-align:left;">
-Female:4996
-</td>
-</tr>
-</tbody>
-</table>
 <pre class="r"><code>ggplot(data=gss74_80, aes(x = sex, fill=sex)) + 
   geom_bar() + 
   scale_fill_brewer(palette = &quot;Set3&quot;) +
@@ -2662,47 +2511,6 @@ Female:4996
 <div id="eda-of-sex-20162022" class="section level2">
 <h2>EDA of Sex (2016–2022)</h2>
 <pre class="r"><code>gss16_22$sex &lt;- factor(gss16_22$sex, levels = c(1, 2), labels = c(&quot;Male&quot;, &quot;Female&quot;))</code></pre>
-<pre class="r"><code>xkablesummary(gss16_22[, c(&quot;sex&quot;)])</code></pre>
-<table class="table table-striped" style="width: auto !important; ">
-<caption>
-Table: Statistics summary.
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-sex
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-Male :5974
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.1
-</td>
-<td style="text-align:left;">
-Female:7307
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.2
-</td>
-<td style="text-align:left;">
-NA’s : 115
-</td>
-</tr>
-</tbody>
-</table>
 <pre class="r"><code>ggplot(data=gss16_22, aes(x = sex, fill=sex)) + 
   geom_bar() + 
   scale_fill_brewer(palette = &quot;Set3&quot;) +
@@ -3244,47 +3052,6 @@ population.</p>
 <h2>EDA of Race (1974–1980)</h2>
 <pre class="r"><code>gss74_80$race &lt;- factor(gss74_80$race, levels = c(1, 2, 3), 
                         labels = c(&quot;White&quot;, &quot;Black&quot;, &quot;Other&quot;))</code></pre>
-<pre class="r"><code>xkablesummary(gss74_80[, c(&quot;race&quot;)])</code></pre>
-<table class="table table-striped" style="width: auto !important; ">
-<caption>
-Table: Statistics summary.
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-race
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-White:8003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.1
-</td>
-<td style="text-align:left;">
-Black: 939
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.2
-</td>
-<td style="text-align:left;">
-Other: 61
-</td>
-</tr>
-</tbody>
-</table>
 <pre class="r"><code>ggplot(data=gss74_80, aes(x = race, fill=race)) + 
   geom_bar() + 
   scale_fill_brewer(palette = &quot;Set3&quot;) +
@@ -3295,55 +3062,6 @@ Other: 61
 <h2>EDA of Race (2016–2022)</h2>
 <pre class="r"><code>gss16_22$race &lt;- factor(gss16_22$race, levels = c(1, 2, 3), 
                         labels = c(&quot;White&quot;, &quot;Black&quot;, &quot;Other&quot;))</code></pre>
-<pre class="r"><code>xkablesummary(gss16_22[, c(&quot;race&quot;)])</code></pre>
-<table class="table table-striped" style="width: auto !important; ">
-<caption>
-Table: Statistics summary.
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-race
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-White:9554
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.1
-</td>
-<td style="text-align:left;">
-Black:2113
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.2
-</td>
-<td style="text-align:left;">
-Other:1611
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-X.3
-</td>
-<td style="text-align:left;">
-NA’s : 118
-</td>
-</tr>
-</tbody>
-</table>
 <pre class="r"><code>ggplot(data=gss16_22, aes(x = race, fill=race)) + 
   geom_bar() + 
   scale_fill_brewer(palette = &quot;Set3&quot;) +
@@ -3428,7 +3146,7 @@ may reflect broader societal and political changes over time.</p>
 <div id="political-spectrum-polviews" class="section level1">
 <h1>Political Spectrum (polviews)</h1>
 <p>The polviews variable in the GSS dataset is coded as Extremely
-Liberal, Liberal, Slightly Liberal, Moderate, Slightly Conservativ,
+Liberal, Liberal, Slightly Liberal, Moderate, Slightly Conservative,
 Conservative, and Extremely Conservative.</p>
 <div id="eda-of-polviews" class="section level2">
 <h2>EDA of Polviews</h2>
@@ -3446,12 +3164,12 @@ towards the government.</p>
 <div id="eda-of-polviews-19741980" class="section level2">
 <h2>EDA of Polviews (1974–1980)</h2>
 <pre class="r"><code>gss74_80$polviews &lt;- factor(gss74_80$polviews, 
-                            levels = c(1, 2, 3, 4, 5, 6, 7),  # Adjust based on your actual data
+                            levels = c(1, 2, 3, 4, 5, 6, 7),
                             labels = c(&quot;Extremely Liberal&quot;, &quot;Liberal&quot;, &quot;Slightly Liberal&quot;, &quot;Moderate&quot;, 
                                        &quot;Slightly Conservative&quot;, &quot;Conservative&quot;, &quot;Extremely Conservative&quot;),
                             ordered = TRUE)</code></pre>
 <pre class="r"><code>gss16_22$polviews &lt;- factor(gss16_22$polviews, 
-                            levels = c(1, 2, 3, 4, 5, 6, 7),  # Adjust based on your actual data
+                            levels = c(1, 2, 3, 4, 5, 6, 7),  
                             labels = c(&quot;Extremely Liberal&quot;, &quot;Liberal&quot;, &quot;Slightly Liberal&quot;, &quot;Moderate&quot;, 
                                        &quot;Slightly Conservative&quot;, &quot;Conservative&quot;, &quot;Extremely Conservative&quot;),
                             ordered = TRUE)</code></pre>

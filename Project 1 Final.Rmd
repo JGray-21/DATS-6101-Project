@@ -77,12 +77,12 @@ Regarding missing data, there are `r sum(is.na(gss74_80$confed))` missing values
 ## EDA of Confidence in the Executive Branch (1974–1980)
 
 ```{r, echo=TRUE, results='hide'}
-gss74_80$confed <- factor(gss74_80$confed, levels = c(1, 2, 3), labels = c("A Great Deal", "Only Some", "Hardly Any"))
+gss74_80$confed <- factor(gss74_80$confed, 
+                          levels = c(1, 2, 3), 
+                          labels = c("A Great Deal", "Only Some", "Hardly Any"))
 ```
 
 ```{r, echo=TRUE}
-xkablesummary(gss16_22[, c("confed")])
-
 
 ggplot(data = gss74_80, aes(x = confed, fill = confed)) + 
   geom_bar() + 
@@ -96,11 +96,12 @@ ggplot(data = gss74_80, aes(x = confed, fill = confed)) +
 
 
 ```{r, echo=TRUE, results='hide'}
-gss16_22$confed <- factor(gss16_22$confed, levels = c(1, 2, 3), labels = c("A Great Deal", "Only Some", "Hardly Any"))
+gss16_22$confed <- factor(gss16_22$confed, 
+                          levels = c(1, 2, 3), 
+                          labels = c("A Great Deal", "Only Some", "Hardly Any"))
 ```
 
 ```{r, echo=TRUE}
-xkablesummary(gss16_22[, c("confed")])
 
 
 ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) + 
@@ -117,7 +118,7 @@ The comparison of confidence in the executive branch between 1974-1980 and 2016-
 ----------------------------------------------
 
 
-# Region:
+# Region
 
 Region remained the same: 1 = "New England", 2 = "Middle Atlantic", 3 = "East North Central", 4 = "West North Central", 5 = "South Atlantic", 6 = "East South Central", 7 = "West South Central", 8 = "Mountain", and 9 = "Pacific".
 
@@ -309,7 +310,6 @@ gss74_80$sex <- factor(gss74_80$sex, levels = c(1, 2), labels = c("Male", "Femal
 ```
 
 ```{r, echo=TRUE}
-xkablesummary(gss74_80[, c("sex")])
 
 ggplot(data=gss74_80, aes(x = sex, fill=sex)) + 
   geom_bar() + 
@@ -323,7 +323,6 @@ gss16_22$sex <- factor(gss16_22$sex, levels = c(1, 2), labels = c("Male", "Femal
 ```
 
 ```{r, echo=TRUE}
-xkablesummary(gss16_22[, c("sex")])
 
 ggplot(data=gss16_22, aes(x = sex, fill=sex)) + 
   geom_bar() + 
@@ -539,7 +538,7 @@ gss74_80$race <- factor(gss74_80$race, levels = c(1, 2, 3),
 ```
 
 ```{r, echo=TRUE}
-xkablesummary(gss74_80[, c("race")])
+
 
 ggplot(data=gss74_80, aes(x = race, fill=race)) + 
   geom_bar() + 
@@ -555,7 +554,6 @@ gss16_22$race <- factor(gss16_22$race, levels = c(1, 2, 3),
 ```
 
 ```{r, echo=TRUE}
-xkablesummary(gss16_22[, c("race")])
 
 ggplot(data=gss16_22, aes(x = race, fill=race)) + 
   geom_bar() + 
@@ -598,7 +596,7 @@ However, in the 2016-2022 period, there is a marked increase in the proportion o
 
 # Political Spectrum (polviews)
 
-The polviews variable in the GSS dataset is coded as Extremely Liberal, Liberal, Slightly Liberal, Moderate, Slightly Conservativ, Conservative, and Extremely Conservative.
+The polviews variable in the GSS dataset is coded as Extremely Liberal, Liberal, Slightly Liberal, Moderate, Slightly Conservative, Conservative, and Extremely Conservative.
 
 ## EDA of Polviews
 
@@ -612,7 +610,7 @@ Missing values for political views are `r sum(is.na(gss74_80$polviews))` in the 
 
 ```{r, echo=TRUE, results='hide'}
 gss74_80$polviews <- factor(gss74_80$polviews, 
-                            levels = c(1, 2, 3, 4, 5, 6, 7),  # Adjust based on your actual data
+                            levels = c(1, 2, 3, 4, 5, 6, 7),
                             labels = c("Extremely Liberal", "Liberal", "Slightly Liberal", "Moderate", 
                                        "Slightly Conservative", "Conservative", "Extremely Conservative"),
                             ordered = TRUE)
@@ -620,7 +618,7 @@ gss74_80$polviews <- factor(gss74_80$polviews,
 
 ```{r, echo=TRUE, results='hide'}
 gss16_22$polviews <- factor(gss16_22$polviews, 
-                            levels = c(1, 2, 3, 4, 5, 6, 7),  # Adjust based on your actual data
+                            levels = c(1, 2, 3, 4, 5, 6, 7),  
                             labels = c("Extremely Liberal", "Liberal", "Slightly Liberal", "Moderate", 
                                        "Slightly Conservative", "Conservative", "Extremely Conservative"),
                             ordered = TRUE)
