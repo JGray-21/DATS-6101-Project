@@ -15,8 +15,8 @@ output:
 ---
 
 
-```{r, echo=TRUE}
-
+```{r, echo=FALSE, result='hide'}
+knitr::opts_chunk$set(warning = FALSE, echo = TRUE)
 library(kableExtra)
 library(gssr)
 library(gssrdoc)
@@ -40,7 +40,7 @@ gss21 <- gss_get_yr(2021)
 gss22 <- gss_get_yr(2022)
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 common_74_80 <- Reduce(intersect, list(colnames(gss74), colnames(gss75), colnames(gss76), colnames(gss77), colnames(gss78), colnames(gss80)))
 
@@ -76,13 +76,13 @@ Regarding missing data, there are `r sum(is.na(gss74_80$confed))` missing values
 
 ## EDA of Confidence in the Executive Branch (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$confed <- factor(gss74_80$confed, 
                           levels = c(1, 2, 3), 
                           labels = c("A Great Deal", "Only Some", "Hardly Any"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 ggplot(data = gss74_80, aes(x = confed, fill = confed)) + 
   geom_bar() + 
@@ -95,13 +95,13 @@ ggplot(data = gss74_80, aes(x = confed, fill = confed)) +
 ## EDA of Confidence in the Executive Branch (2016–2022)
 
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$confed <- factor(gss16_22$confed, 
                           levels = c(1, 2, 3), 
                           labels = c("A Great Deal", "Only Some", "Hardly Any"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 
 ggplot(data=gss16_22, aes(x = confed, color=confed, fill=confed)) + 
@@ -137,11 +137,11 @@ For missing data, there are `r sum(is.na(gss74_80$region))` missing values in th
 ## EDA of Region (1974–1980)
 
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$region <- factor(gss74_80$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss74_80[, c("region")])
 
 
@@ -155,12 +155,12 @@ ggplot(data=gss74_80, aes(x = region, color=region, fill=region)) +
 ## EDA of Region (2016–2022)
 
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 
 gss16_22$region <- factor(gss16_22$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
 ```
 
-```{r, echo=TRUE} 
+```{r, echo=FALSE} 
 
 xkablesummary(gss16_22[, c("region")])
 
@@ -181,7 +181,7 @@ There is an association between region and confidence in the executive branch.
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 pol_data <- gss74_80[, c('region', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -192,7 +192,7 @@ rel_new$observed
 
 ## Chi-Square Test (2016–2022)
 
-```{r,echo=TRUE}
+```{r,echo=FALSE}
 pol_data <- gss16_22[, c('region', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -218,7 +218,7 @@ Missing data for age: there are `r sum(is.na(gss74_80$age))` missing values in t
 
 ## EDA of Age (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$age <- as.numeric(gss74_80$age)
 
 gss74_80$age <- factor(cut(gss74_80$age, 
@@ -228,7 +228,7 @@ gss74_80$age <- factor(cut(gss74_80$age,
                              ordered = TRUE)
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss74_80[, c("age")])
 
 ggplot(data = gss74_80, aes(x = age, fill = age)) +  
@@ -239,7 +239,7 @@ ggplot(data = gss74_80, aes(x = age, fill = age)) +
 
 ## EDA of Age (2016–2022)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$age <- as.numeric(gss16_22$age)
 
 xkablesummary(gss16_22[, c("age")])
@@ -252,7 +252,7 @@ gss16_22$age <- factor(cut(gss16_22$age,
 ```
 
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss16_22[, c("age")])
 
 ggplot(data = gss16_22, aes(x = age, fill = age)) +  
@@ -272,7 +272,7 @@ There is an association between age and confidence in the executive branch.
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_age_table_74_80 <- table(gss74_80$confed, gss74_80$age)
 chisq_test_result <- chisq.test(confed_age_table_74_80)
 confed_age_table_74_80
@@ -280,7 +280,7 @@ confed_age_table_74_80
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_age_table_16_22 <- table(gss16_22$confed, gss16_22$age)
 chisq_test_result <- chisq.test(confed_age_table_16_22)
 confed_age_table_16_22
@@ -305,11 +305,11 @@ From 1974 to 1980, the most frequent sex reported is `r names(which.max(table(gs
 
 ## EDA of Sex (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$sex <- factor(gss74_80$sex, levels = c(1, 2), labels = c("Male", "Female"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 ggplot(data=gss74_80, aes(x = sex, fill=sex)) + 
   geom_bar() + 
@@ -318,11 +318,11 @@ ggplot(data=gss74_80, aes(x = sex, fill=sex)) +
 ```
 
 ## EDA of Sex (2016–2022)
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$sex <- factor(gss16_22$sex, levels = c(1, 2), labels = c("Male", "Female"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 ggplot(data=gss16_22, aes(x = sex, fill=sex)) + 
   geom_bar() + 
@@ -340,7 +340,7 @@ There is an association between sex and confidence in the executive branch.
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_sex_table_74_80 <- table(gss74_80$confed, gss74_80$sex)
 chisq.test(confed_sex_table_74_80)
 confed_sex_table_74_80
@@ -348,7 +348,7 @@ confed_sex_table_74_80
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_sex_table_16_22 <- table(gss16_22$confed, gss16_22$sex)
 chisq.test(confed_sex_table_16_22)
 confed_sex_table_16_22
@@ -375,11 +375,11 @@ There are `r sum(is.na(gss74_80$relig))` missing values in the 1974–1980 data 
 
 ## EDA of Religion (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$relig <- factor(gss74_80$relig, levels = c(1:13), labels = c('Protestant', 'Catholic', 'Jewish', 'None', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other'))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss74_80[, c("relig")])
 
 ggplot(data=gss74_80, aes(x = relig, fill=relig)) + 
@@ -390,11 +390,11 @@ ggplot(data=gss74_80, aes(x = relig, fill=relig)) +
 
 ## EDA of Religion (2016–2022)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$relig <- factor(gss16_22$relig, levels = c(1:13), labels = c('Protestant', 'Catholic', 'Jewish', 'None', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other', 'Other'))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss16_22[, c("relig")])
 
 
@@ -414,7 +414,7 @@ There is an association between religion and confidence in the executive branch.
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 pol_data <- gss74_80[, c('relig', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -425,7 +425,7 @@ rel_old$observed
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 pol_data <- gss16_22[, c('relig', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -454,7 +454,7 @@ There are `r sum(is.na(gss74_80$educ))` missing values for education in the 1974
 
 ## EDA of Education (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$educ <- factor(gss74_80$educ, 
                        levels = c(1:20), 
                        labels = c(rep('High School or Less', 12), 
@@ -462,7 +462,7 @@ gss74_80$educ <- factor(gss74_80$educ,
                                   rep('Graduate', 4)))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss74_80[, c("educ")])
 
 ggplot(data=gss74_80, aes(x = educ, fill=educ)) + 
@@ -473,7 +473,7 @@ ggplot(data=gss74_80, aes(x = educ, fill=educ)) +
 
 ## EDA of Education (2016–2022)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$educ <- factor(gss16_22$educ, 
                        levels = c(1:20), 
                        labels = c(rep('High School or Less', 12), 
@@ -481,7 +481,7 @@ gss16_22$educ <- factor(gss16_22$educ,
                                   rep('Graduate', 4)))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss16_22[, c("educ")])
 
 ggplot(data=gss16_22, aes(x = educ, fill=educ)) + 
@@ -500,7 +500,7 @@ There is an association between education and confidence in the executive branch
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_educ_table_74_80 <- table(gss74_80$confed, gss74_80$educ)
 chisq.test(confed_educ_table_74_80)
 confed_educ_table_74_80
@@ -508,7 +508,7 @@ confed_educ_table_74_80
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_educ_table_16_22 <- table(gss16_22$confed, gss16_22$educ)
 chisq.test(confed_educ_table_16_22)
 confed_educ_table_16_22
@@ -532,12 +532,12 @@ The race variable was coded as White, Black, and Other.
 In 1974–1980, the most common race is `r names(which.max(table(gss74_80$race)))`, while in 2016–2022, it is `r names(which.max(table(gss16_22$race)))`. The least common race in the 1974–1980 dataset is `r names(which.min(table(gss74_80$race)))`, and in the 2016–2022 dataset, it is `r names(which.min(table(gss16_22$race)))`. The missing values for race in the 1974–1980 dataset are `r sum(is.na(gss74_80$race))`, and in the 2016–2022 dataset, they are `r sum(is.na(gss16_22$race))`. The race distribution in both the 1974-1980 and 2016-2022 datasets is dominated by White respondents, with White being the mode in both periods. In the 1974-1980 data, there are no missing values, while the 2016-2022 data has 118 missing responses, but the overall pattern remains similar, with White respondents forming the majority. As researchers, we would ideally aim for a more representative sample, with greater diversity in race categories to ensure that the data better reflects the broader population.
 
 ## EDA of Race (1974–1980)
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$race <- factor(gss74_80$race, levels = c(1, 2, 3), 
                         labels = c("White", "Black", "Other"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 
 ggplot(data=gss74_80, aes(x = race, fill=race)) + 
@@ -548,12 +548,12 @@ ggplot(data=gss74_80, aes(x = race, fill=race)) +
 
 ## EDA of Race (2016–2022)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$race <- factor(gss16_22$race, levels = c(1, 2, 3), 
                         labels = c("White", "Black", "Other"))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 ggplot(data=gss16_22, aes(x = race, fill=race)) + 
   geom_bar() + 
@@ -571,7 +571,7 @@ There is an association between race and confidence in the executive branch.
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_race_table_74_80 <- table(gss74_80$confed, gss74_80$race)
 chisq.test(confed_race_table_74_80)
 confed_race_table_74_80
@@ -579,7 +579,7 @@ confed_race_table_74_80
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_race_table_16_22 <- table(gss16_22$confed, gss16_22$race)
 chisq.test(confed_race_table_16_22)
 confed_race_table_16_22
@@ -608,7 +608,7 @@ Missing values for political views are `r sum(is.na(gss74_80$polviews))` in the 
 
 ## EDA of Polviews (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$polviews <- factor(gss74_80$polviews, 
                             levels = c(1, 2, 3, 4, 5, 6, 7),
                             labels = c("Extremely Liberal", "Liberal", "Slightly Liberal", "Moderate", 
@@ -616,7 +616,7 @@ gss74_80$polviews <- factor(gss74_80$polviews,
                             ordered = TRUE)
 ```
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss16_22$polviews <- factor(gss16_22$polviews, 
                             levels = c(1, 2, 3, 4, 5, 6, 7),  
                             labels = c("Extremely Liberal", "Liberal", "Slightly Liberal", "Moderate", 
@@ -624,7 +624,7 @@ gss16_22$polviews <- factor(gss16_22$polviews,
                             ordered = TRUE)
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss74_80[, c("polviews")])
 
 ggplot(data = gss74_80, aes(x = polviews)) +  
@@ -635,7 +635,7 @@ ggplot(data = gss74_80, aes(x = polviews)) +
 
 ## EDA of Polviews (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss16_22[, c("polviews")])
 
 ggplot(data = gss16_22, aes(x = polviews)) +
@@ -654,7 +654,7 @@ There is an association between political views and confidence in the executive 
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 pol_data <- gss74_80[, c('polviews', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -665,7 +665,7 @@ rel_old$observed
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 pol_data <- gss16_22[, c('polviews', 'confed')]
 pol_data <- pol_data[complete.cases(pol_data),]
 
@@ -696,11 +696,11 @@ The number of missing values for income in the 1974–1980 dataset is `r sum(is.
 
 ## EDA of Income (1974–1980)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 gss74_80$income <- factor(gss74_80$income, levels = c(1:12), labels = c('Low','Low','Low', 'Lower Middle','Lower Middle', 'Middle','Middle','Middle', 'Upper Middle','Upper Middle', 'High','High'))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 
 xkablesummary(gss74_80[, c("income")])
 
@@ -713,12 +713,12 @@ ggplot(data=gss74_80, aes(x = income, fill=income)) +
 
 ## EDA of Income (2016–2022)
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=FALSE, results='hide'}
 
 gss16_22$income16 <- factor(gss16_22$income16, levels = c(1:25), labels = c('Low','Low','Low','Low','Low','Low','Low','Low', 'Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle','Lower-Middle', 'Middle','Middle','Middle','Middle','Middle', 'Upper-Middle','Upper-Middle', 'High', 'High', 'High'))
 ```
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 xkablesummary(gss16_22[, c("income16")])
 
 
@@ -738,7 +738,7 @@ There is an association between income and confidence in the executive branch.
 
 ## Chi-Square Test (1974–1980)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_income_table_74_80 <- table(gss74_80$confed, gss74_80$income)
 chisq.test(confed_income_table_74_80)
 confed_income_table_74_80
@@ -746,7 +746,7 @@ confed_income_table_74_80
 
 ## Chi-Square Test (2016–2022)
 
-```{r, echo=TRUE}
+```{r, echo=FALSE}
 confed_income_table_16_22 <- table(gss16_22$confed, gss16_22$income)
 chisq.test(confed_income_table_16_22)
 confed_income_table_16_22

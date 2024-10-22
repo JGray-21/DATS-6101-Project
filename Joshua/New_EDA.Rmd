@@ -90,7 +90,7 @@ Here is a map of the country divided into its regions
 
 ### Distribution
 
-```{r}
+```{r, echo=FALSE}
 #Plot histograms
 ggplot(gss_old, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 1974-1980", x="Region")
 ggplot(gss_new, aes(x=region, color=region, fill=region)) + geom_histogram(stat="count") + labs(title = "Region 2016-2022", x="Region")
