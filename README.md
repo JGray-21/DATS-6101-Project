@@ -88,8 +88,8 @@ gss16_22
 
 
 
- Project 2 - Which vars bild the best predicive model and why.
-  * Age and confed
-  * Income and confed
-  * Educ and confed
-  * Each test w/ polviews (with and withough intersation term of who is in office) and race.
+ Project 2 - Which variables build the best predictive model and why?
+  * Age and confed
+  * Income and confed
+  * Educ and confed
+  * Each test w/ polviews (with and without interaction terms of who is in office) and race.
