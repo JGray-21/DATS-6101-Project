@@ -188,6 +188,13 @@ ggplot(gss_old, aes(x=polviews)) + geom_histogram(stat="count", show.legend = F)
 ggplot(gss_new, aes(x=polviews, fill='red')) + geom_histogram(stat="count", show.legend = F) + labs(title = "Polviews 2016-2022", x="Political Lean")
 ```
 
+```{r}
+count(gss_new, confed)
+count(gss_old, confed)
+```
+
+
+
 ### Summary
 
 The average value for political placement in the older surveys is `r mean(gss_old$polviews, na.rm=T)`. The average political placement in the recent surveys is `r mean(gss_new$polviews, na.rm=T)`. While the vast majority of respondents identified as moderate in both time intervals, the size of each extreme group grew substantially. This indicates a much more polarized political landscape in recent years which might account for the growth in negative sentiment towards the government.
