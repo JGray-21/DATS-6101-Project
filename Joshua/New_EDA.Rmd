@@ -26,8 +26,8 @@ library(ezids)
 
 ```{r}
 #Read in data frames and filter down to the variables we want
-vars1 <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews', 'confed')
-vars2 <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income16', 'region', 'polviews', 'confed')
+vars1 <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income', 'region', 'polviews', 'confed', 'Pres76')
+vars2 <- c('X', 'year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'income16', 'region', 'polviews', 'confed', 'Pres16')
 gss_old <- read.csv("../gss74_80.csv")
 gss_old <- gss_old[, vars1]
 gss_new <- read.csv("../gss16_22.csv")
