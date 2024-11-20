@@ -1,0 +1,78 @@
+---
+title: "Group Project #2 - Confidence in the Executive Branch of the Federal Government by Different Demographic Data"
+author: " Joshua Gray, Vaijayanti Deshmukh, & Marissa Mowers"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+```{r, echo=FALSE, result='hide'}
+knitr::opts_chunk$set(warning = FALSE, echo = TRUE)
+library(kableExtra)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(knitr)
+library(ezids)
+library(RColorBrewer)
+
+
+gss77 <- gss_get_yr(1977)
+gss78 <- gss_get_yr(1978)
+gss80 <- gss_get_yr(1980)
+gss82 <- gss_get_yr(1982)
+
+gss18 <- gss_get_yr(2018)
+gss21 <- gss_get_yr(2021)
+gss22 <- gss_get_yr(2022)
+```
+
+```{r, echo=FALSE}
+
+common_77_82 <- Reduce(intersect, list(colnames(gss77), colnames(gss78), colnames(gss80), colnames(gss82)))
+
+common_18_22 <- Reduce(intersect, list(colnames(gss18), colnames(gss21), colnames(gss22)))                      
+
+gss77_82 <- rbind(gss77 [common_77_82], gss78 [common_77_82], gss80 [common_77_82], gss82 [common_77_82])
+
+gss18_22 <- rbind(gss18 [common_18_22], gss21 [common_18_22], gss22 [common_18_22])
+
+
+gss77_82
+
+gss18_22 
+
+
+```
+
+```{r, echo=TRUE}
+xkablesummary(gss18_22[, c("pres16")])
+xkablesummary(gss77_82[, c("pres76")])
+
+
+gss18_22$vote16 <- as.factor(gss18_22$vote16)
+
+gss18_22$age <-  recode as 0-1 
+```
+
+
+```{r, echo=FALSE}
+ggplot(data = gss18_22, aes(x = vote16, fill = vote16)) +  
+  geom_bar() + 
+  scale_fill_brewer(palette = "Set3") + 
+  labs(x = "Who R Voted for", y = "Frequency", title = "Who the Respondent Voted for in the 2016 election")
+
+
+Do a corrilation 
+
+```
