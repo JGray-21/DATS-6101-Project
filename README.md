@@ -92,4 +92,20 @@ gss16_22
   * Age and confed
   * Income and confed
   * Educ and confed
+  * Vote
   * Each test w/ polviews (with and without interaction terms of who is in office) and race.
+
+Bivariate and multivariate - 3 models with: 
+77-82 and 18-22
+
+Josh: 
+ * make interaction terms
+ * Pres16 and Pres76
+
+ Vaijayanti:
+ * Confed
+ * EDA
+
+ Marissa:
+ * Polviews
+ * correlations
