@@ -3,6 +3,7 @@
 library(gssr)
 library(gssrdoc)
 library(dplyr)
+library(ggplot2)
 
 #Read in data from each year
 y77 <- gss_get_yr(1977)
@@ -46,16 +47,17 @@ gss77_82$income <- case_when(
   gss77_82$income == 2 ~ 'Low',
   gss77_82$income == 3 ~ 'Low',
   gss77_82$income == 4 ~ 'Low',
-  gss77_82$income == 5 ~ 'Low',
-  gss77_82$income == 6 ~ 'Middle',
-  gss77_82$income == 7 ~ 'Middle',
-  gss77_82$income == 8 ~ 'Middle',
+  gss77_82$income == 5 ~ 'Lower Middle',
+  gss77_82$income == 6 ~ 'Lower Middle',
+  gss77_82$income == 7 ~ 'Lower Middle',
+  gss77_82$income == 8 ~ 'Lower Middle',
   gss77_82$income == 9 ~ 'Middle',
-  gss77_82$income == 10 ~ 'Middle',
-  gss77_82$income == 11 ~ 'High',
+  gss77_82$income == 10 ~ 'Upper Middle',
+  gss77_82$income == 11 ~ 'Upper Middle',
   gss77_82$income == 12 ~ 'High',
   TRUE ~ 'NA'
 )
+
 
 
 gss18_22$income <- case_when(
@@ -74,15 +76,15 @@ gss18_22$income <- case_when(
   gss18_22$income == 13 ~ 'Low',
   gss18_22$income == 14 ~ 'Low',
   gss18_22$income == 15 ~ 'Low',
-  gss18_22$income == 16 ~ 'Middle',
-  gss18_22$income == 17 ~ 'Middle',
-  gss18_22$income == 18 ~ 'Middle',
-  gss18_22$income == 19 ~ 'Middle',
+  gss18_22$income == 16 ~ 'Lower Middle',
+  gss18_22$income == 17 ~ 'Lower Middle',
+  gss18_22$income == 18 ~ 'Lower Middle',
+  gss18_22$income == 19 ~ 'Lower Middle',
   gss18_22$income == 20 ~ 'Middle',
   gss18_22$income == 21 ~ 'Middle',
-  gss18_22$income == 22 ~ 'Middle',
-  gss18_22$income == 23 ~ 'Middle',
-  gss18_22$income == 24 ~ 'High',
+  gss18_22$income == 22 ~ 'Upper Middle',
+  gss18_22$income == 23 ~ 'Upper Middle',
+  gss18_22$income == 24 ~ 'Upper Middle',
   gss18_22$income == 25 ~ 'High',
   gss18_22$income == 26 ~ 'High',
   TRUE ~ 'NA'
@@ -133,3 +135,5 @@ gss$incumbency <- ifelse(gss$year == 1977, 1,
 
 #write dataframe to csv file
 write.csv(gss, 'GSS_data.csv')
+
+ggplot(gss18_22, aes(x=income)) + geom_histogram(stat="count") + labs(title = "Income", x="Income")
