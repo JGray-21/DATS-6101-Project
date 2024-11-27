@@ -95,17 +95,19 @@ gss16_22
   * Vote
   * Each test w/ polviews (with and without interaction terms of who is in office) and race.
 
+Pres and incumbency
 Bivariate and multivariate - 3 models with: 
-77-82 and 18-22
+**77-82 and 18-22** 
 
 Josh: 
  * make interaction terms
  * Pres16 and Pres76
+ * Trees
 
  Vaijayanti:
  * Confed
- * EDA
+ * EDA for Pres
 
  Marissa:
  * Polviews
- * correlations
+ * correlations - Tetrachoric
