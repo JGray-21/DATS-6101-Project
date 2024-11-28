@@ -1,5 +1,5 @@
 ---
-title: "Group Project #1 - Confidence in the Executive Branch of the Federal Government by Different Demographic Data"
+title: "Group Project #2"
 author: " Joshua Gray, Vaijayanti Deshmukh, & Marissa Mowers"
 date: "`r Sys.Date()`"
 output:
