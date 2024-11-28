@@ -16,7 +16,6 @@ output:
 
 
 ```{r, echo=FALSE, result='hide'}
-knitr::opts_chunk$set(warning = FALSE, echo = TRUE)
 library(kableExtra)
 library(gssr)
 library(gssrdoc)
@@ -25,15 +24,18 @@ library(RColorBrewer)
 library(knitr)
 library(ezids)
 library(RColorBrewer)
-library(tidyverse)
 library(psych)
 library(broom)
 library(dplyr)
+library(pROC)
 
 file_path <- "C:\\Users\\mnmow\\OneDrive\\Desktop\\GWU\\Fall 2024\\DATS6101 Intro\\DATS-6101-Project\\Project 2\\GSS_data.csv"
 gss <- read.csv(file_path)
 
 str(gss)
+
+gss <- na.omit(gss)
+
 ```
 
 # Polviews bivariate graph
@@ -89,22 +91,23 @@ tetra_corr <- psych::tetrachoric(binary_vars)
 print(tetra_corr$rho)
 
 ```
+
 # Logistic Regression
 
 ## Polviews and Year
 
 ```{r, echo=TRUE}
 
-model_year <- glm(polviews ~ age, data = gss, family = binomial)
+model_year <- glm(polviews ~ year, data = gss, family = binomial)
 model_year
 
-````
+```
 
 ## Polviews and Age
 
 ```{r, echo=TRUE}
 
-model_age <- glm(polviews ~ year, data = gss, family = binomial)
+model_age <- glm(polviews ~ age, data = gss, family = binomial)
 summary(model_age)
 
 ```
@@ -146,7 +149,7 @@ summary(model_a_i_e)
 ```{r, echo=TRUE}
 
 model_a_i_e_p <- glm(polviews ~ age + income + educ + pres, data = gss, family = binomial)
-summary(model_a_i_e_p
+summary(model_a_i_e_p)
 ```
 
 ## Polviews with Age, Income, Education, Who R Voted For, and Year
