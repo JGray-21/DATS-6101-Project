@@ -1,0 +1,80 @@
+---
+title: "Group Project #1 - Confidence in the Executive Branch of the Federal Government by Different Demographic Data"
+author: " Joshua Gray, Vaijayanti Deshmukh, & Marissa Mowers"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+```{r, echo=FALSE, result='hide'}
+knitr::opts_chunk$set(warning = FALSE, echo = TRUE)
+library(kableExtra)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(knitr)
+library(ezids)
+library(RColorBrewer)
+library(tidyverse)
+library(psych)
+library(broom)
+library(dplyr)
+
+file_path <- "C:\\Users\\mnmow\\OneDrive\\Desktop\\GWU\\Fall 2024\\DATS6101 Intro\\DATS-6101-Project\\Project 2\\GSS_data.csv"
+gss <- read.csv(file_path)
+
+str(gss)
+```
+
+```{r, echo=FALSE}
+
+binary_vars <- gss %>% select(polviews, pres, incumbency)
+
+binary_vars <- binary_vars %>% mutate_all(as.numeric) %>% na.omit()
+lapply(binary_vars, unique)
+
+tetra_corr <- psych::tetrachoric(binary_vars)
+print(tetra_corr$rho)
+
+```
+
+```{r, echo=TRUE}
+
+model_age <- glm(polviews ~ age, data = gss, family = binomial)
+summary(model_age)
+
+model_educ <- glm(polviews ~ educ, data = gss, family = binomial)
+summary(model_educ)
+
+model_income <- glm(polviews ~ income, data = gss, family = binomial)
+summary(model_income)
+
+model_a_i <- glm(polviews ~ age + income, data = gss, family = binomial)
+summary(model_a_i)
+
+model_a_i_e <- glm(polviews ~ age + income + educ, data = gss, family = binomial)
+summary(model_a_i_e)
+
+model_a_i_e_p <- glm(polviews ~ age + income + educ + pres, data = gss, family = binomial)
+summary(model_a_i_e_p
+
+model_all <- glm(polviews ~ age + income + educ + pres + year, data = gss, family = binomial)
+summary(model_all)
+
+interaction_model_wo_time <- glm(polviews ~ age + income + educ + pres * incumbency, data = gss, family = binomial)
+summary(interaction_model_wo_time)
+
+interaction_model_time <- glm(polviews ~ age + income + educ + time + pres * incumbency, data = gss, family = binomial)
+summary(interaction_model_time)
+
+```
