@@ -28,6 +28,7 @@ library(psych)
 library(broom)
 library(dplyr)
 library(pROC)
+library(caret)
 
 file_path <- "C:\\Users\\mnmow\\OneDrive\\Desktop\\GWU\\Fall 2024\\DATS6101 Intro\\DATS-6101-Project\\Project 2\\GSS_data.csv"
 gss <- read.csv(file_path)
@@ -99,7 +100,23 @@ print(tetra_corr$rho)
 ```{r, echo=TRUE}
 
 model_year <- glm(polviews ~ year, data = gss, family = binomial)
-model_year
+summary(model_year)
+
+
+1 - (model_year$deviance / model_year$null.deviance)
+
+gss$predicted_prob_year <- predict(model_year, type = "response")
+gss$predicted_class_year <- ifelse(gss$predicted_prob_year > 0.5, 1, 0)
+
+roc_year <- roc(polviews ~ predicted_prob_year, data = gss)
+roc_year$auc
+plot(roc_year)
+
+conf_matrix_year <- confusionMatrix(
+  data = as.factor(gss$predicted_class_year),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_year
 
 ```
 
@@ -110,22 +127,71 @@ model_year
 model_age <- glm(polviews ~ age, data = gss, family = binomial)
 summary(model_age)
 
+
+1 - (model_age$deviance / model_age$null.deviance)
+
+gss$predicted_prob_age <- predict(model_age, type = "response")
+gss$predicted_class_age <- ifelse(gss$predicted_prob_age > 0.5, 1, 0)
+
+roc_age <- roc(polviews ~ predicted_prob_age, data = gss)
+roc_age$auc
+plot(roc_age)
+
+conf_matrix_age <- confusionMatrix(
+  data = as.factor(gss$predicted_class_age),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_age
+
 ```
 
-## Polviews and Educ
+## Polviews and Education
 
 ```{r, echo=TRUE}
 
 model_educ <- glm(polviews ~ educ, data = gss, family = binomial)
 summary(model_educ)
+
+
+1 - (model_educ$deviance / model_educ$null.deviance)
+
+gss$predicted_prob_educ <- predict(model_educ, type = "response")
+gss$predicted_class_educ <- ifelse(gss$predicted_prob_educ > 0.5, 1, 0)
+
+roc_educ <- roc(polviews ~ predicted_prob_educ, data = gss)
+roc_educ$auc
+plot(roc_educ)
+
+conf_matrix_educ <- confusionMatrix(
+  data = as.factor(gss$predicted_class_educ),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_educ
+
 ```
 
-## Polviews and Educ
+## Polviews and Income
 
 ```{r, echo=TRUE}
 
 model_income <- glm(polviews ~ income, data = gss, family = binomial)
 summary(model_income)
+
+
+1 - (model_income$deviance / model_income$null.deviance)
+
+gss$predicted_prob_income <- predict(model_income, type = "response")
+gss$predicted_class_income <- ifelse(gss$predicted_prob_income > 0.5, 1, 0)
+
+roc_income <- roc(polviews ~ predicted_prob_income, data = gss)
+roc_income$auc
+plot(roc_income)
+
+conf_matrix_income <- confusionMatrix(
+  data = as.factor(gss$predicted_class_income),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_income
 ```
 
 ## Polviews with Age and Income
@@ -134,6 +200,21 @@ summary(model_income)
 
 model_a_i <- glm(polviews ~ age + income, data = gss, family = binomial)
 summary(model_a_i)
+
+1 - (model_a_i$deviance / model_a_i$null.deviance)
+
+gss$predicted_prob_a_i <- predict(model_a_i, type = "response")
+gss$predicted_class_a_i <- ifelse(gss$predicted_prob_a_i > 0.5, 1, 0)
+
+roc_a_i <- roc(polviews ~ predicted_prob_a_i, data = gss)
+roc_a_i$auc
+plot(roc_a_i)
+
+conf_matrix_a_i <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_a_i
 ```
 
 ## Polviews with Age, Income, and Education
@@ -142,6 +223,22 @@ summary(model_a_i)
 
 model_a_i_e <- glm(polviews ~ age + income + educ, data = gss, family = binomial)
 summary(model_a_i_e)
+
+1 - (model_a_i_e$deviance / model_a_i_e$null.deviance)
+
+gss$predicted_prob_a_i_e <- predict(model_a_i_e, type = "response")
+gss$predicted_class_a_i_e <- ifelse(gss$predicted_prob_a_i_e > 0.5, 1, 0)
+
+roc_a_i_e <- roc(polviews ~ predicted_prob_a_i_e, data = gss)
+roc_a_i_e$auc
+plot(roc_a_i_e)
+
+conf_matrix_a_i_e <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i_e),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_a_i_e
+
 ```
 
 ## Polviews with Age, Income, Education, and Who R Voted For
@@ -150,6 +247,21 @@ summary(model_a_i_e)
 
 model_a_i_e_p <- glm(polviews ~ age + income + educ + pres, data = gss, family = binomial)
 summary(model_a_i_e_p)
+
+1 - (model_a_i_e_p$deviance / model_a_i_e_p$null.deviance)
+
+gss$predicted_prob_a_i_e_p <- predict(model_a_i_e_p, type = "response")
+gss$predicted_class_a_i_e_p <- ifelse(gss$predicted_prob_a_i_e_p > 0.5, 1, 0)
+
+roc_a_i_e_p <- roc(polviews ~ predicted_prob_a_i_e_p, data = gss)
+roc_a_i_e_p$auc
+plot(roc_a_i_e_p)
+
+conf_matrix_a_i_e_p <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i_e_p),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_a_i_e_p
 ```
 
 ## Polviews with Age, Income, Education, Who R Voted For, and Year
@@ -158,6 +270,22 @@ summary(model_a_i_e_p)
 
 model_all <- glm(polviews ~ age + income + educ + pres + year, data = gss, family = binomial)
 summary(model_all)
+
+
+1 - (model_all$deviance / model_all$null.deviance)
+
+gss$predicted_prob_all <- predict(model_all, type = "response")
+gss$predicted_class_all <- ifelse(gss$predicted_prob_all > 0.5, 1, 0)
+
+roc_all <- roc(polviews ~ predicted_prob_all, data = gss)
+roc_all$auc
+plot(roc_all)
+
+conf_matrix_all <- confusionMatrix(
+  data = as.factor(gss$predicted_class_all),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_all
 ```
 
 ## Polviews with Age, Income, Education, and an Interaction Between Who R Voted For and Incumbency
@@ -166,6 +294,21 @@ summary(model_all)
 
 interaction_model_wo_year <- glm(polviews ~ age + income + educ + pres * incumbency, data = gss, family = binomial)
 summary(interaction_model_wo_year)
+
+1 - (interaction_model_wo_year$deviance / interaction_model_wo_year$null.deviance)
+
+gss$predicted_prob_wo_year <- predict(interaction_model_wo_year, type = "response")
+gss$predicted_class_wo_year <- ifelse(gss$predicted_prob_wo_year > 0.5, 1, 0)
+
+roc_wo_year <- roc(polviews ~ predicted_prob_wo_year, data = gss)
+roc_wo_year$auc
+plot(roc_wo_year)
+
+conf_matrix_wo_year <- confusionMatrix(
+  data = as.factor(gss$predicted_class_wo_year),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_wo_year
 ```
 
 ## Polviews with Age, Income, Education, Year, and an Interaction Between Who R Voted For and Incumbency
@@ -175,4 +318,19 @@ summary(interaction_model_wo_year)
 interaction_model_year <- glm(polviews ~ age + income + educ + year + pres * incumbency, data = gss, family = binomial)
 summary(interaction_model_year)
 
+
+1 - (interaction_model_year$deviance / interaction_model_year$null.deviance)
+
+gss$predicted_prob_year_interaction <- predict(interaction_model_year, type = "response")
+gss$predicted_class_year_interaction <- ifelse(gss$predicted_prob_year_interaction > 0.5, 1, 0)
+
+roc_year_interaction <- roc(polviews ~ predicted_prob_year_interaction, data = gss)
+roc_year_interaction$auc
+plot(roc_year_interaction)
+
+conf_matrix_year_interaction <- confusionMatrix(
+  data = as.factor(gss$predicted_class_year_interaction),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_year_interaction
 ```
