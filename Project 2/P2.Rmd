@@ -52,7 +52,7 @@ fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
 
 ```{r}
 # Testing and Validation
-pred <- predict(gssfit, type = "class")
+pred <- predict(gssfit, gss_test, type = "class")
 mat <- confusionMatrix(gss$pred)
 mat
 ```
