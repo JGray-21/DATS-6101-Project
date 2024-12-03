@@ -60,7 +60,7 @@ mat
 
 ```{r}
 set.seed(1)
-gssfit <- rpart(pres ~ age + race + relig, data=gss, method="class")
+gssfit <- rpart(confed ~ age + income + educ, data=gss, method="class")
 
 printcp(gssfit) # display the results
 plotcp(gssfit) # visualize cross-validation results
