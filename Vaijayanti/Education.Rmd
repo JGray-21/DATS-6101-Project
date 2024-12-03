@@ -131,5 +131,4 @@ The most frequent education in the early surveys is  `r names(which.max(table(gs
 The most frequent education in the recent surveys is `r names(which.max(table(gss_new$educ)))`.
 
 
-
 ```
