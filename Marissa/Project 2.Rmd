@@ -30,6 +30,7 @@ library(dplyr)
 library(pROC)
 library(caret)
 library(rattle)
+library(rsample)
 
 file_path <- "C:\\Users\\mnmow\\OneDrive\\Desktop\\GWU\\Fall 2024\\DATS6101 Intro\\DATS-6101-Project\\Project 2\\GSS_data.csv"
 gss <- read.csv(file_path)
@@ -43,7 +44,7 @@ gss <- na.omit(gss)
 # Polviews bivariate graph
 
 ```{r, echo=TRUE}
-ggplot(gss, aes(x = as.factor(year), fill = as.factor(polviews))) +
+ggplot(gss, aes(x = as.factor(era), fill = as.factor(polviews))) +
   geom_bar(position = "dodge") + 
   scale_fill_manual(
     values = c("0" = "red", "1" = "blue"), 
@@ -63,7 +64,7 @@ ggplot(gss, aes(x = as.factor(year), fill = as.factor(polviews))) +
 # Polviews bivariate graph
 
 ```{r, echo=TRUE}
-ggplot(gss, aes(x = as.factor(year), fill = as.factor(pres))) +
+ggplot(gss, aes(x = as.factor(era), fill = as.factor(pres))) +
   geom_bar(position = "dodge") + 
   scale_fill_manual(
     values = c("0" = "red", "1" = "blue"), 
@@ -72,7 +73,7 @@ ggplot(gss, aes(x = as.factor(year), fill = as.factor(pres))) +
   ) +
   labs(
     title = "Frequency of Political Views Over the Years",
-    x = "Year",
+    x = "Years",
     y = "Count"
   ) +
   theme_minimal() +
@@ -101,24 +102,24 @@ print(tetra_corr$rho)
 
 ```{r, echo=TRUE}
 
-model_year <- glm(polviews ~ year, data = gss, family = binomial)
-summary(model_year)
+model_era <- glm(polviews ~ era, data = gss, family = binomial)
+summary(model_era)
 
 
-1 - (model_year$deviance / model_year$null.deviance)
+1 - (model_era$deviance / model_era$null.deviance)
 
-gss$predicted_prob_year <- predict(model_year, type = "response")
-gss$predicted_class_year <- ifelse(gss$predicted_prob_year > 0.5, 1, 0)
+gss$predicted_prob_era <- predict(model_era, type = "response")
+gss$predicted_class_era <- ifelse(gss$predicted_prob_era > 0.5, 1, 0)
 
-roc_year <- roc(polviews ~ predicted_prob_year, data = gss)
-roc_year$auc
-plot(roc_year)
+roc_era <- roc(polviews ~ predicted_prob_era, data = gss)
+roc_era$auc
+plot(roc_era)
 
-conf_matrix_year <- confusionMatrix(
-  data = as.factor(gss$predicted_class_year),
+conf_matrix_era <- confusionMatrix(
+  data = as.factor(gss$predicted_class_era),
   reference = as.factor(gss$polviews)
 )
-conf_matrix_year
+conf_matrix_era
 
 ```
 
@@ -270,7 +271,7 @@ conf_matrix_a_i_e_p
 
 ```{r, echo=TRUE}
 
-model_all <- glm(polviews ~ age + income + educ + pres + year, data = gss, family = binomial)
+model_all <- glm(polviews ~ age + income + educ + pres + era, data = gss, family = binomial)
 summary(model_all)
 
 
@@ -294,46 +295,46 @@ conf_matrix_all
 
 ```{r, echo=TRUE}
 
-interaction_model_wo_year <- glm(polviews ~ age + income + educ + pres * incumbency, data = gss, family = binomial)
-summary(interaction_model_wo_year)
+interaction_model_wo_era <- glm(polviews ~ age + income + educ + pres * incumbency, data = gss, family = binomial)
+summary(interaction_model_wo_era)
 
-1 - (interaction_model_wo_year$deviance / interaction_model_wo_year$null.deviance)
+1 - (interaction_model_wo_era$deviance / interaction_model_wo_era$null.deviance)
 
-gss$predicted_prob_wo_year <- predict(interaction_model_wo_year, type = "response")
-gss$predicted_class_wo_year <- ifelse(gss$predicted_prob_wo_year > 0.5, 1, 0)
+gss$predicted_prob_wo_era <- predict(interaction_model_wo_era, type = "response")
+gss$predicted_class_wo_era <- ifelse(gss$predicted_prob_wo_era > 0.5, 1, 0)
 
-roc_wo_year <- roc(polviews ~ predicted_prob_wo_year, data = gss)
-roc_wo_year$auc
-plot(roc_wo_year)
+roc_wo_era <- roc(polviews ~ predicted_prob_wo_era, data = gss)
+roc_wo_era$auc
+plot(roc_wo_era)
 
-conf_matrix_wo_year <- confusionMatrix(
-  data = as.factor(gss$predicted_class_wo_year),
+conf_matrix_wo_era <- confusionMatrix(
+  data = as.factor(gss$predicted_class_wo_era),
   reference = as.factor(gss$polviews)
 )
-conf_matrix_wo_year
+conf_matrix_wo_era
 ```
 
 ## Polviews with Age, Income, Education, Year, and an Interaction Between Who R Voted For and Incumbency
 
 ```{r, echo=TRUE}
 
-interaction_model_year <- glm(polviews ~ age + income + educ + year + pres * incumbency, data = gss, family = binomial)
-summary(interaction_model_year)
+interaction_model_era <- glm(polviews ~ age + income + educ + era + pres * incumbency, data = gss, family = binomial)
+summary(interaction_model_era)
 
 
-1 - (interaction_model_year$deviance / interaction_model_year$null.deviance)
+1 - (interaction_model_era$deviance / interaction_model_era$null.deviance)
 
-gss$predicted_prob_year_interaction <- predict(interaction_model_year, type = "response")
-gss$predicted_class_year_interaction <- ifelse(gss$predicted_prob_year_interaction > 0.5, 1, 0)
+gss$predicted_prob_era_interaction <- predict(interaction_model_era, type = "response")
+gss$predicted_class_era_interaction <- ifelse(gss$predicted_prob_era_interaction > 0.5, 1, 0)
 
-roc_year_interaction <- roc(polviews ~ predicted_prob_year_interaction, data = gss)
-roc_year_interaction$auc
-plot(roc_year_interaction)
+roc_era_interaction <- roc(polviews ~ predicted_prob_era_interaction, data = gss)
+roc_era_interaction$auc
+plot(roc_era_interaction)
 
-conf_matrix_year_interaction <- confusionMatrix(
-  data = as.factor(gss$predicted_class_year_interaction),
+conf_matrix_era_interaction <- confusionMatrix(
+  data = as.factor(gss$predicted_class_era_interaction),
   reference = as.factor(gss$polviews)
 )
-conf_matrix_year_interaction
+conf_matrix_era_interaction
 ```
 
