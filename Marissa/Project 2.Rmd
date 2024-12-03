@@ -29,6 +29,7 @@ library(broom)
 library(dplyr)
 library(pROC)
 library(caret)
+library(rattle)
 
 file_path <- "C:\\Users\\mnmow\\OneDrive\\Desktop\\GWU\\Fall 2024\\DATS6101 Intro\\DATS-6101-Project\\Project 2\\GSS_data.csv"
 gss <- read.csv(file_path)
@@ -82,6 +83,7 @@ ggplot(gss, aes(x = as.factor(year), fill = as.factor(pres))) +
 # Tetrachoric Correlation 
 
 ```{r, echo=FALSE}
+
 
 binary_vars <- gss %>% select(polviews, pres, incumbency)
 
@@ -334,3 +336,4 @@ conf_matrix_year_interaction <- confusionMatrix(
 )
 conf_matrix_year_interaction
 ```
+
