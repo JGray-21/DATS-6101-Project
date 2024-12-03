@@ -1,0 +1,71 @@
+---
+title: "Regression Trees"
+output: html_document
+date: "2024-11-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(rpart)
+library(rattle)
+library(rsample)
+library(caret)
+```
+
+```{r}
+# Read in data and convert catrgorical variables into factors
+gss <- read.csv('GSS_Data.csv')
+
+gss$region <- factor(gss$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+gss$income <- factor(gss$income, levels = c(1, 2, 3, 4, 5), labels = c("Low", "Lower Middle", "Middle", "Upper Middle", "High"))
+gss$sex <- factor(gss$sex, levels = c(1, 2), labels = c("Male", "Female"))
+gss$polviews <- factor(gss$polviews, levels = c(0, 1), labels = c("Right", "Left"))
+gss$race <- factor(gss$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
+gss$relig <- factor(gss$relig, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), labels = c("Prot", "Cath", "Jew", "None", "Other", "Budd", "Hind", "East", "Islam", "Orth", "Christ","Nativ", "Nonden"))
+gss$incumbency <- factor(gss$incumbency, levels = c(0, 1), labels = c("Rep", "Dem"))
+gss$pres <- factor(gss$pres, levels = c(0, 1), labels = c("Rep", "Dem"))
+gss$confed <- factor(gss$confed, levels = c(0, 1), labels = c("Trust", "No Trust"))
+str(gss)
+```
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss, prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+```
+
+```{r}
+# Make the tree
+set.seed(1)
+gssfit <- rpart(polviews ~ sex + age + race + educ + income + region, data=gss_train, method="class")
+
+printcp(gssfit) # display the results
+plotcp(gssfit) # visualize cross-validation results
+summary(gssfit) # detailed summary of splits
+
+
+fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
+```
+
+```{r}
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
+```
+
+
+```{r}
+set.seed(1)
+gssfit <- rpart(pres ~ age + race + relig, data=gss, method="class")
+
+printcp(gssfit) # display the results
+plotcp(gssfit) # visualize cross-validation results
+summary(gssfit) # detailed summary of splits
+
+
+fancyRpartPlot(gssfit, main = "Classification Tree for Confed")
+```

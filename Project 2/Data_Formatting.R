@@ -43,50 +43,50 @@ gss18_22 <- rbind(y18[common_18_22], y21[common_18_22], y22[common_18_22])
 
 #Recode Income variable
 gss77_82$income <- case_when(
-  gss77_82$income == 1 ~ 'Low',
-  gss77_82$income == 2 ~ 'Low',
-  gss77_82$income == 3 ~ 'Low',
-  gss77_82$income == 4 ~ 'Low',
-  gss77_82$income == 5 ~ 'Lower Middle',
-  gss77_82$income == 6 ~ 'Lower Middle',
-  gss77_82$income == 7 ~ 'Lower Middle',
-  gss77_82$income == 8 ~ 'Lower Middle',
-  gss77_82$income == 9 ~ 'Middle',
-  gss77_82$income == 10 ~ 'Upper Middle',
-  gss77_82$income == 11 ~ 'Upper Middle',
-  gss77_82$income == 12 ~ 'High',
+  gss77_82$income == 1 ~ '1',
+  gss77_82$income == 2 ~ '1',
+  gss77_82$income == 3 ~ '1',
+  gss77_82$income == 4 ~ '1',
+  gss77_82$income == 5 ~ '2',
+  gss77_82$income == 6 ~ '2',
+  gss77_82$income == 7 ~ '2',
+  gss77_82$income == 8 ~ '2',
+  gss77_82$income == 9 ~ '3',
+  gss77_82$income == 10 ~ '4',
+  gss77_82$income == 11 ~ '4',
+  gss77_82$income == 12 ~ '5',
   TRUE ~ 'NA'
 )
 
 
 
 gss18_22$income <- case_when(
-  gss18_22$income == 1 ~ 'Low',
-  gss18_22$income == 2 ~ 'Low',
-  gss18_22$income == 3 ~ 'Low',
-  gss18_22$income == 4 ~ 'Low',
-  gss18_22$income == 5 ~ 'Low',
-  gss18_22$income == 6 ~ 'Low',
-  gss18_22$income == 7 ~ 'Low',
-  gss18_22$income == 8 ~ 'Low',
-  gss18_22$income == 9 ~ 'Low',
-  gss18_22$income == 10 ~ 'Low',
-  gss18_22$income == 11 ~ 'Low',
-  gss18_22$income == 12 ~ 'Low',
-  gss18_22$income == 13 ~ 'Low',
-  gss18_22$income == 14 ~ 'Low',
-  gss18_22$income == 15 ~ 'Low',
-  gss18_22$income == 16 ~ 'Lower Middle',
-  gss18_22$income == 17 ~ 'Lower Middle',
-  gss18_22$income == 18 ~ 'Lower Middle',
-  gss18_22$income == 19 ~ 'Lower Middle',
-  gss18_22$income == 20 ~ 'Middle',
-  gss18_22$income == 21 ~ 'Middle',
-  gss18_22$income == 22 ~ 'Upper Middle',
-  gss18_22$income == 23 ~ 'Upper Middle',
-  gss18_22$income == 24 ~ 'Upper Middle',
-  gss18_22$income == 25 ~ 'High',
-  gss18_22$income == 26 ~ 'High',
+  gss18_22$income == 1 ~ '1',
+  gss18_22$income == 2 ~ '1',
+  gss18_22$income == 3 ~ '1',
+  gss18_22$income == 4 ~ '1',
+  gss18_22$income == 5 ~ '1',
+  gss18_22$income == 6 ~ '1',
+  gss18_22$income == 7 ~ '1',
+  gss18_22$income == 8 ~ '1',
+  gss18_22$income == 9 ~ '1',
+  gss18_22$income == 10 ~ '1',
+  gss18_22$income == 11 ~ '1',
+  gss18_22$income == 12 ~ '1',
+  gss18_22$income == 13 ~ '1',
+  gss18_22$income == 14 ~ '1',
+  gss18_22$income == 15 ~ '1',
+  gss18_22$income == 16 ~ '2',
+  gss18_22$income == 17 ~ '2',
+  gss18_22$income == 18 ~ '2',
+  gss18_22$income == 19 ~ '2',
+  gss18_22$income == 20 ~ '3',
+  gss18_22$income == 21 ~ '3',
+  gss18_22$income == 22 ~ '4',
+  gss18_22$income == 23 ~ '4',
+  gss18_22$income == 24 ~ '4',
+  gss18_22$income == 25 ~ '5',
+  gss18_22$income == 26 ~ '5',
   TRUE ~ 'NA'
 )
 
@@ -101,6 +101,9 @@ colnames(gss18_22) <- c('year', 'id', 'sex', 'age', 'race', 'relig', 'educ', 'in
 #Remove labels from pres variable
 gss77_82$pres <- as.character(gss77_82$pres)
 gss18_22$pres <- as.character(gss18_22$pres)
+
+#Remove na values
+gss77_82 <- na.omit(gss77_82)
 
 #Join the two time intervals together
 gss <- bind_rows(gss77_82, gss18_22)
