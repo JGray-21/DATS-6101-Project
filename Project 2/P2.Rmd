@@ -52,15 +52,16 @@ fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
 
 ```{r}
 # Testing and Validation
-pred <- predict(gssfit, gss_test, type = "class")
-mat <- confusionMatrix(gss_test$polviews, pred)
+pred <- predict(gssfit, type = "class")
+mat <- confusionMatrix(gss$pred)
 mat
 ```
 
 
 ```{r}
 set.seed(1)
-gssfit <- rpart(confed ~ age + income + educ, data=gss, method="class")
+#gss_clean <- na.omit(gss)
+gssfit <- rpart(confed ~ age + income + educ, data=gss_clean, method="class")
 
 printcp(gssfit) # display the results
 plotcp(gssfit) # visualize cross-validation results
@@ -69,3 +70,16 @@ summary(gssfit) # detailed summary of splits
 
 fancyRpartPlot(gssfit, main = "Classification Tree for Confed")
 ```
+
+```{r}
+set.seed(1)
+gssfit <- rpart(confed ~ incumbency + pres + age + income + educ + race, data=gss_train, method="class")
+
+printcp(gssfit) # display the results
+plotcp(gssfit) # visualize cross-validation results
+summary(gssfit) # detailed summary of splits
+
+
+fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
+```
+

@@ -110,6 +110,9 @@ gss <- bind_rows(gss77_82, gss18_22)
 
 #Re-code pres variable to be 0 for Rep. candidate
 gss$pres[gss$pres == 2] <- 0
+gss$pres[gss$pres == 3] <- NA
+gss$pres[gss$pres == 4] <- NA
+gss$pres[gss$pres == 5] <- NA
 
 #Re-code Polviews variable to be binomial
 gss <- gss[gss$polviews != 4,]
@@ -121,6 +124,7 @@ gss$polviews[gss$polviews == 6] <- 0
 gss$polviews[gss$polviews == 7] <- 0
 
 #Recode confed variable to be binomial
+gss <- gss[!is.na(gss$confed),]
 gss$confed[gss$confed == 1] <- 1
 gss$confed[gss$confed == 2] <- 1
 gss$confed[gss$confed == 3] <- 0
