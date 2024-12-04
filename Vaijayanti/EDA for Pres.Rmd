@@ -1,0 +1,57 @@
+---
+title: "EDA for Pres"
+author: "Vaijayanti Deshmukh"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+```{r}
+# Load necessary libraries
+library(kableExtra)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(knitr)
+library(ezids)
+library(psych)
+library(broom)
+library(dplyr)
+library(pROC)
+library(caret)
+```
+
+```{r}
+file_path <- "C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\Project2 VD\\GSS_data.csv"
+gss <- read.csv(file_path)
+
+str(gss)
+
+gss <- na.omit(gss)
+```
+
+
+### Box Plot
+```{r, echo=TRUE}
+   ggplot(gss, aes(x = as.factor(pres), y = year)) + 
+     geom_boxplot() + 
+     labs(title = "Boxplot of Votes by Pres", x = "Pres", y = "Year")
+```
+
+### Frequency Polygon
+```{r, echo=TRUE}
+   ggplot(gss, aes(x = pres, color = as.factor(pres))) + 
+     geom_freqpoly(binwidth = 1) + 
+     labs(title = "Frequency Polygon for Pres Votes", x = "Pres", y = "Frequency")
+```
+
