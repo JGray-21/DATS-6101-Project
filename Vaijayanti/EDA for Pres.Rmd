@@ -40,6 +40,16 @@ str(gss)
 gss <- na.omit(gss)
 ```
 
+### Pie Chart
+```{r, echo=TRUE}
+ggplot(gss, aes(x = "", fill = as.factor(year))) + 
+  geom_bar(stat = "count") + 
+  coord_polar(theta = "y") + 
+  labs(title = "Pie Chart of Votes for Leader") + 
+  theme_void() +
+  theme(axis.text.x = element_blank())
+
+```
 
 ### Box Plot
 ```{r, echo=TRUE}
