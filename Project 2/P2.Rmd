@@ -30,6 +30,7 @@ gss$confed <- factor(gss$confed, levels = c(0, 1), labels = c("Trust", "No Trust
 str(gss)
 ```
 
+## Polviews
 ```{r}
 # Split training and test data sets
 gss_split <- initial_split(gss, prop = 0.75, strata = polviews)
@@ -40,46 +41,203 @@ gss_train <- training(gss_split)
 ```{r}
 # Make the tree
 set.seed(1)
-gssfit <- rpart(polviews ~ sex + age + race + educ + income + region, data=gss_train, method="class")
-
-printcp(gssfit) # display the results
-plotcp(gssfit) # visualize cross-validation results
-summary(gssfit) # detailed summary of splits
-
-
+gssfit <- rpart(polviews ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
 fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
-```
 
-```{r}
 # Testing and Validation
-pred <- predict(gssfit, type = "class")
-mat <- confusionMatrix(gss$pred)
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
 mat
 ```
 
 
 ```{r}
+#Build Tree
 set.seed(1)
-#gss_clean <- na.omit(gss)
-gssfit <- rpart(confed ~ age + income + educ, data=gss_clean, method="class")
+gssfit <- rpart(polviews ~ incumbency + confed + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
 
-printcp(gssfit) # display the results
-plotcp(gssfit) # visualize cross-validation results
-summary(gssfit) # detailed summary of splits
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
+```
 
 
-fancyRpartPlot(gssfit, main = "Classification Tree for Confed")
+```{r}
+# Split training and test data sets for only current era
+gss_split <- initial_split(gss[gss$era == 1,], prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree With Political Categories
+set.seed(1)
+gssfit <- rpart(polviews ~ incumbency + confed + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for polviews")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
 ```
 
 ```{r}
+# Split training and test data sets for only past era
+gss_split <- initial_split(gss[gss$era == 0,], prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree
 set.seed(1)
-gssfit <- rpart(confed ~ incumbency + pres + age + income + educ + race, data=gss_train, method="class")
+gssfit <- rpart(polviews ~ incumbency + confed + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Previous Era Classification Tree for polviews")
 
-printcp(gssfit) # display the results
-plotcp(gssfit) # visualize cross-validation results
-summary(gssfit) # detailed summary of splits
-
-
-fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
 ```
+
+## Confed
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss, prop = 0.75, strata = confed)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Non-Political Categories
+set.seed(1)
+gssfit <- rpart(confed ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Classification Tree Confed (Non-Political)")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss, prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Political Categories
+set.seed(1)
+gssfit <- rpart(confed ~ incumbency + polviews + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Classification Tree for Confed (Political)")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
+
+```{r}
+# Split training and test data sets for only current era
+gss_split <- initial_split(gss[gss$era == 1,], prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree
+set.seed(1)
+gssfit <- rpart(confed ~ incumbency + polviews + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for polviews (Political)")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
+```{r}
+# Split training and test data sets for only previous era
+gss_split <- initial_split(gss[gss$era == 0,], prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree
+set.seed(1)
+gssfit <- rpart(confed ~ incumbency + polviews + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Previous Era Classification Tree for polviews (Political)")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
+
+## Pres
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss, prop = 0.75, strata = pres)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+```
+
+```{r}
+# Make the tree
+set.seed(1)
+gssfit <- rpart(pres ~ sex + age + race + income + educ + relig + region, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Classification Tree for Pres (Non-Political)")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$pres, pred)
+mat
+```
+
+
+```{r}
+#Build Tree
+set.seed(1)
+gssfit <- rpart(pres ~ incumbency + confed + polviews, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Classification Tree for Pres (Political)")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$pres, pred)
+mat
+```
+
+
+```{r}
+# Split training and test data sets for only current era
+gss_split <- initial_split(gss[gss$era == 1,], prop = 0.75, strata = pres)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree With Political Categories
+set.seed(1)
+gssfit <- rpart(pres ~ incumbency + confed + polviews, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for Pres")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$pres, pred)
+mat
+```
+
+```{r}
+# Split training and test data sets for only past era
+gss_split <- initial_split(gss[gss$era == 0,], prop = 0.75, strata = pres)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree
+set.seed(1)
+gssfit <- rpart(pres ~ incumbency + confed + polviews, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Previous Era Classification Tree for Pres")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$pres, pred)
+mat
+```
+
+
 

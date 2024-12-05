@@ -1,0 +1,266 @@
+---
+title: "Group Project #2"
+author: "Vaijayanti Deshmukh"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load necessary libraries
+library(kableExtra)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(knitr)
+library(ezids)
+library(psych)
+library(broom)
+library(dplyr)
+library(pROC)
+library(caret)
+
+```
+
+
+```{r, echo=TRUE}
+
+# Load dataset
+data_file_path <- "C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\Project2 VD\\GSS_data.csv"
+survey_data <- read.csv(data_file_path)
+
+# Inspect the structure of the dataset
+str(survey_data)
+
+# Remove missing values
+survey_data_clean <- na.omit(survey_data)
+
+# Exploratory Data Analysis for Voted Leader
+# Plot the distribution of 'voted_leader'
+ggplot(survey_data_clean, aes(x = as.factor(pres))) +  
+  geom_bar(stat = "count", fill = "skyblue") +  
+  labs(x = "Voted Leader", y = "Frequency", title = "Frequency of Votes for Leader (voted_leader)") +
+  theme_minimal()
+
+# Plot votes per year with leader as the color distinction
+ggplot(survey_data_clean, aes(x = as.factor(year), fill = as.factor(pres))) +
+  geom_bar(position = "dodge") +  
+  scale_fill_manual(
+    values = c("0" = "coral", "1" = "pink"), 
+    labels = c("Opponent", "Elected Leader"), 
+    name = "Voted Leader"
+  ) +
+  labs(
+    title = "Frequency of Votes for Leader",
+    x = "Year",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Bi-variate graph for Confidence in Government
+# Plot confidence in government over the years
+ggplot(survey_data_clean, aes(x = as.factor(year), fill = as.factor(confed))) +
+  geom_bar(position = "dodge") + 
+  scale_fill_manual(
+    values = c("0" = "coral", "1" = "pink"), 
+    labels = c("Low", "High"), 
+    name = "Confidence in Government"
+  ) +
+  labs(
+    title = "Confidence Over the Years",
+    x = "Year",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Logistic Regression Analysis
+## Confidence in Government and Vote Year
+year_logistic_model <- glm(confed ~ year, data = survey_data_clean, family = binomial)
+summary(year_logistic_model)
+
+# Model performance (deviance explained)
+1 - (year_logistic_model$deviance / year_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_year <- predict(year_logistic_model, type = "response")
+survey_data_clean$predicted_class_year <- ifelse(survey_data_clean$predicted_prob_year > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'vote_year' model
+roc_year <- roc(confed ~ predicted_prob_year, data = survey_data_clean)
+roc_year$auc
+plot(roc_year)
+
+conf_matrix_year <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_year),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_year
+
+## Confidence and Age
+age_logistic_model <- glm(confed ~ age, data = survey_data_clean, family = binomial)
+summary(age_logistic_model)
+
+# Model performance (deviance explained)
+1 - (age_logistic_model$deviance / age_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_age <- predict(age_logistic_model, type = "response")
+survey_data_clean$predicted_class_age <- ifelse(survey_data_clean$predicted_prob_age > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'age' model
+roc_age <- roc(confed ~ predicted_prob_age, data = survey_data_clean)
+roc_age$auc
+plot(roc_age)
+
+conf_matrix_age <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_age),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_age
+
+## Confidence and Education
+education_logistic_model <- glm(confed ~ educ, data = survey_data_clean, family = binomial)
+summary(education_logistic_model)
+
+# Model performance (deviance explained)
+1 - (education_logistic_model$deviance / education_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_education <- predict(education_logistic_model, type = "response")
+survey_data_clean$predicted_class_education <- ifelse(survey_data_clean$predicted_prob_education > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'education' model
+roc_education <- roc(confed ~ predicted_prob_education, data = survey_data_clean)
+roc_education$auc
+plot(roc_education)
+
+conf_matrix_education <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_education),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_education
+
+## Confidence and Income
+income_logistic_model <- glm(confed ~ income, data = survey_data_clean, family = binomial)
+summary(income_logistic_model)
+
+# Model performance (deviance explained)
+1 - (income_logistic_model$deviance / income_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_income <- predict(income_logistic_model, type = "response")
+survey_data_clean$predicted_class_income <- ifelse(survey_data_clean$predicted_prob_income > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'income' model
+roc_income <- roc(confed ~ predicted_prob_income, data = survey_data_clean)
+roc_income$auc
+plot(roc_income)
+
+conf_matrix_income <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_income),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_income
+
+## Confidence with Age and Income
+age_income_logistic_model <- glm(confed ~ age + income, data = survey_data_clean, family = binomial)
+summary(age_income_logistic_model)
+
+# Model performance (deviance explained)
+1 - (age_income_logistic_model$deviance / age_income_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_age_income <- predict(age_income_logistic_model, type = "response")
+survey_data_clean$predicted_class_age_income <- ifelse(survey_data_clean$predicted_prob_age_income > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'age_income' model
+roc_age_income <- roc(confed ~ predicted_prob_age_income, data = survey_data_clean)
+roc_age_income$auc
+plot(roc_age_income)
+
+conf_matrix_age_income <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_age_income),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_age_income
+
+## Confidence with Age, Income, and Education
+age_income_education_logistic_model <- glm(confed ~ age + income + educ, data = survey_data_clean, family = binomial)
+summary(age_income_education_logistic_model)
+
+# Model performance (deviance explained)
+1 - (age_income_education_logistic_model$deviance / age_income_education_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_age_income_education <- predict(age_income_education_logistic_model, type = "response")
+survey_data_clean$predicted_class_age_income_education <- ifelse(survey_data_clean$predicted_prob_age_income_education > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'age_income_education' model
+roc_age_income_education <- roc(confed ~ predicted_prob_age_income_education, data = survey_data_clean)
+roc_age_income_education$auc
+plot(roc_age_income_education)
+
+conf_matrix_age_income_education <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_age_income_education),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_age_income_education
+
+## Confidence with Age, Income, Education, and Voted Leader
+age_income_education_voted_leader_logistic_model <- glm(confed ~ age + income + educ + pres, data = survey_data_clean, family = binomial)
+summary(age_income_education_voted_leader_logistic_model)
+
+# Model performance (deviance explained)
+1 - (age_income_education_voted_leader_logistic_model$deviance / age_income_education_voted_leader_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_age_income_education_voted_leader <- predict(age_income_education_voted_leader_logistic_model, type = "response")
+survey_data_clean$predicted_class_age_income_education_voted_leader <- ifelse(survey_data_clean$predicted_prob_age_income_education_voted_leader > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'age_income_education_voted_leader' model
+roc_age_income_education_voted_leader <- roc(confed ~ predicted_prob_age_income_education_voted_leader, data = survey_data_clean)
+roc_age_income_education_voted_leader$auc
+plot(roc_age_income_education_voted_leader)
+
+conf_matrix_age_income_education_voted_leader <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_age_income_education_voted_leader),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_age_income_education_voted_leader
+
+## Confidence with Age, Income, Education, and Incumbency
+age_income_education_incumbency_logistic_model <- glm(confed ~ age + income + educ + incumbency, data = survey_data_clean, family = binomial)
+summary(age_income_education_incumbency_logistic_model)
+
+# Model performance (deviance explained)
+1 - (age_income_education_incumbency_logistic_model$deviance / age_income_education_incumbency_logistic_model$null.deviance)
+
+# Predicted probabilities and classifications
+survey_data_clean$predicted_prob_age_income_education_incumbency <- predict(age_income_education_incumbency_logistic_model, type = "response")
+survey_data_clean$predicted_class_age_income_education_incumbency <- ifelse(survey_data_clean$predicted_prob_age_income_education_incumbency > 0.5, 1, 0)
+
+# ROC and Confusion Matrix for the 'age_income_education_incumbency' model
+roc_age_income_education_incumbency <- roc(confed ~ predicted_prob_age_income_education_incumbency, data = survey_data_clean)
+roc_age_income_education_incumbency$auc
+plot(roc_age_income_education_incumbency)
+
+conf_matrix_age_income_education_incumbency <- confusionMatrix(
+  data = as.factor(survey_data_clean$predicted_class_age_income_education_incumbency),
+  reference = as.factor(survey_data_clean$confed)
+)
+conf_matrix_age_income_education_incumbency
+```

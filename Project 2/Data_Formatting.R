@@ -142,5 +142,3 @@ gss$incumbency <- ifelse(gss$year == 1977, 1,
 
 #write dataframe to csv file
 write.csv(gss, 'GSS_data.csv')
-
-ggplot(gss18_22, aes(x=income)) + geom_histogram(stat="count") + labs(title = "Income", x="Income")
