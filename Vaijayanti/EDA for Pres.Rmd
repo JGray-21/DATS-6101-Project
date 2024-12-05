@@ -65,6 +65,13 @@ ggplot(gss, aes(x = as.factor(pres), y = year)) +
   labs(title = "Boxplot of Votes by Pres", x = "Pres", y = "Year")
 
 ```
+```{r}
+ggplot(gss, aes(x = as.factor(pres), y = year, fill = as.factor(pres))) + 
+  geom_boxplot() + 
+  labs(title = "Boxplot of Votes by Pres", x = "Pres", y = "Year") + 
+  scale_fill_brewer(palette = "Set3")  
+
+```
 
 ### Frequency Polygon
 ```{r, echo=TRUE}
