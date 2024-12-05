@@ -44,7 +44,7 @@ gss <- na.omit(gss)
 # Polviews bivariate graph
 
 ```{r, echo=TRUE}
-ggplot(gss, aes(x = as.factor(era), fill = as.factor(polviews))) +
+ggplot(gss, aes(x = as.factor(year), fill = as.factor(polviews))) +
   geom_bar(position = "dodge") + 
   scale_fill_manual(
     values = c("0" = "red", "1" = "blue"), 
@@ -64,15 +64,15 @@ ggplot(gss, aes(x = as.factor(era), fill = as.factor(polviews))) +
 # Polviews bivariate graph
 
 ```{r, echo=TRUE}
-ggplot(gss, aes(x = as.factor(era), fill = as.factor(pres))) +
+ggplot(gss, aes(x = as.factor(year), fill = as.factor(confed))) +
   geom_bar(position = "dodge") + 
   scale_fill_manual(
     values = c("0" = "red", "1" = "blue"), 
     labels = c("Republican", "Democrat"), 
-    name = "Political View"
+    name = "Confidence in the Executive Branch"
   ) +
   labs(
-    title = "Frequency of Political Views Over the Years",
+    title = "Frequency of Confidence in the Executive Branch Over the Years",
     x = "Years",
     y = "Count"
   ) +
