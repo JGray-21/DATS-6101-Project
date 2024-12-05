@@ -286,3 +286,24 @@ ggplot(survey_data_clean, aes(x = as.numeric(year), group = as.factor(confed), c
   )
 
 ```
+
+```{r}
+ggplot(survey_data_clean, aes(x = as.factor(year), fill = as.factor(confed))) +
+  geom_bar(position = "fill") + 
+  scale_fill_manual(
+    values = c("0" = "coral", "1" = "pink"),
+    labels = c("Low Confidence", "High Confidence"),
+    name = "Confidence Level"
+  ) +
+  labs(
+    title = "Proportion of Confidence Levels Over the Years",
+    x = "Year",
+    y = "Proportion"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+```
