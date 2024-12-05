@@ -307,3 +307,30 @@ ggplot(survey_data_clean, aes(x = as.factor(year), fill = as.factor(confed))) +
   )
 
 ```
+
+```{r}
+# Aggregate data to get the overall count for each confidence level
+confidence_summary <- survey_data_clean %>%
+  group_by(confed) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Create the pie chart
+ggplot(confidence_summary, aes(x = "", y = Percentage, fill = as.factor(confed))) +
+  geom_col(width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  scale_fill_manual(
+    values = c("0" = "coral", "1" = "pink"),
+    labels = c("Low Confidence", "High Confidence"),
+    name = "Confidence Level"
+  ) +
+  labs(
+    title = "Overall Confidence Distribution",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_void() +
+  theme(legend.position = "right")
+
+```
+
