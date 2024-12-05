@@ -264,3 +264,25 @@ conf_matrix_age_income_education_incumbency <- confusionMatrix(
 )
 conf_matrix_age_income_education_incumbency
 ```
+
+```{r}
+ggplot(survey_data_clean, aes(x = as.numeric(year), group = as.factor(confed), color = as.factor(confed))) +
+  geom_line(stat = "count", size = 1) +
+  geom_point(stat = "count", size = 2) +
+  scale_color_manual(
+    values = c("0" = "coral", "1" = "pink"),
+    labels = c("Low Confidence", "High Confidence"),
+    name = "Confidence Level"
+  ) +
+  labs(
+    title = "Trends in Confidence in Government Over the Years",
+    x = "Year",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+```
