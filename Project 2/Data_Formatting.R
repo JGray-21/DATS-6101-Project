@@ -124,7 +124,7 @@ gss$polviews[gss$polviews == 6] <- 0
 gss$polviews[gss$polviews == 7] <- 0
 
 #Recode confed variable to be binomial
-gss <- gss[!is.na(gss$confed),]
+#gss <- gss[!is.na(gss$confed),]
 gss$confed[gss$confed == 1] <- 1
 gss$confed[gss$confed == 2] <- 1
 gss$confed[gss$confed == 3] <- 0

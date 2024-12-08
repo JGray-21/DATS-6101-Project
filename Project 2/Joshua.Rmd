@@ -1,0 +1,196 @@
+---
+title: "Trees Report"
+output: html_document
+date: "2024-12-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gssr)
+library(gssrdoc)
+library(rpart)
+library(rattle)
+library(rsample)
+library(caret)
+```
+
+```{r}
+# Read in data and convert catrgorical variables into factors
+gss <- read.csv('GSS_Data.csv')
+
+gss$region <- factor(gss$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
+gss$income <- factor(gss$income, levels = c(1, 2, 3, 4, 5), labels = c("Low", "Lower Middle", "Middle", "Upper Middle", "High"))
+gss$sex <- factor(gss$sex, levels = c(1, 2), labels = c("Male", "Female"))
+gss$polviews <- factor(gss$polviews, levels = c(0, 1), labels = c("Cons", "Lib"))
+gss$race <- factor(gss$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
+gss$relig <- factor(gss$relig, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), labels = c("Prot", "Cath", "Jew", "None", "Other", "Budd", "Hind", "East", "Islam", "Orth", "Christ","Nativ", "Nonden"))
+gss$incumbency <- factor(gss$incumbency, levels = c(0, 1), labels = c("Rep", "Dem"))
+gss$pres <- factor(gss$pres, levels = c(0, 1), labels = c("Rep", "Dem"))
+gss$confed <- factor(gss$confed, levels = c(0, 1), labels = c("Trust", "No Trust"))
+gss_clean <- na.omit(gss)
+```
+
+## Classification trees: Comparing predictability between time intervals
+
+### Confidence trees
+
+When it comes to comparing time intervals, we wanted to see if there was a noticable difference in predictability. In doing so, we could gain some insight on how diversity of thought has changed among the american people. An increase in accuracty could indicate lower diversity of thought among identity groups, and a decrease in accuracy could indicate an increase in diversity of thought among the same groups. To do this, we used classification trees to see if there was a difference in preformance between our two time intervals. 
+
+Here is a look at how our first pair of models preformed with confed as the response variable. 
+
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss_clean[gss_clean$era == 0,], prop = 0.70, strata = confed)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Political Categories
+set.seed(1)
+gssfit <- rpart(confed ~ sex + age + race + relig + region + income + educ + incumbency + pres + polviews, data=gss_train, method="class")
+summary(gssfit)
+#fancyRpartPlot(gssfit, main = "Prior Era Classification Tree for Confed")
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss_clean[gss_clean$era == 1,], prop = 0.70, strata = confed)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Political Categories
+set.seed(1)
+gssfit <- rpart(confed ~ sex + age + race + relig + region + income + educ + incumbency + pres + polviews, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for Confed")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
+As you can see, the classification tree method does not find any viable splits when only fitting on the prior era data. However, when fitting on the modern era data, the method fits a model with an accuracy of `r mat$overall[['Accuracy']]`. Therefore, we can see that it is easier to predict how confident a person is in the executice branch today than in the 70's and 80's.
+
+
+### Political Views Trees
+
+Now lets repeat the process with polviwes as our response variable.
+
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss_clean[gss_clean$era == 0,], prop = 0.70, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Political Categories
+set.seed(1)
+gssfit <- rpart(polviews ~ sex + age + race + relig + region + income + educ + incumbency + pres + confed, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Prior Era Classification Tree for Polviews")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+pmat0 <- confusionMatrix(gss_test$polviews, pred)
+pmat0
+```
+
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss_clean[gss_clean$era == 1,], prop = 0.70, strata = confed)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Political Categories
+set.seed(1)
+gssfit <- rpart(polviews ~ sex + age + race + relig + region + income + educ + incumbency + pres + confed, data=gss_train, method="class")
+summary(gssfit)
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for Polviews")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+pmat1 <- confusionMatrix(gss_test$polviews, pred)
+pmat1
+```
+
+
+Looking at our results, we can see that the tree method fitted a tree for both time periods. However there differences in shape are interesting. For the model fitted on the prior era data, the tree makes splits at several nodes. However, the model fitted on the current era only made one split, that split being on the pres variable indicating that there is a strong correlation between how a person identifies politically and who they voted for. Let's compare the accuracy of each model. The model for the older data has an accuracy of `r pmat0$overall[['Accuracy']]`, while the model for the new data has an accuracy of `r pmat1$overall[['Accuracy']]`. We can see that the newer model has a much higher accuracy while only slpitting on one variable. This is a strong indication that the diversity of political identity among voters has shrunk over the years.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
