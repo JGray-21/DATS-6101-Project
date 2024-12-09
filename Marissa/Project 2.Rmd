@@ -67,8 +67,8 @@ ggplot(gss, aes(x = as.factor(year), fill = as.factor(polviews))) +
 ggplot(gss, aes(x = as.factor(year), fill = as.factor(confed))) +
   geom_bar(position = "dodge") + 
   scale_fill_manual(
-    values = c("0" = "red", "1" = "blue"), 
-    labels = c("Republican", "Democrat"), 
+    values = c("0" = "lightgreen", "1" = "orchid"), 
+    labels = c("Trust", "No Trust"), 
     name = "Confidence in the Executive Branch"
   ) +
   labs(
@@ -336,5 +336,35 @@ conf_matrix_era_interaction <- confusionMatrix(
   reference = as.factor(gss$polviews)
 )
 conf_matrix_era_interaction
+```
+
+
+
+
+```{r, echo=TRUE}
+str(gss)
+
+# Levels of measurement:
+# polviews: Nominal (categorical variable with two possible values)
+# age: Ratio (continuous variable)
+# income: Ratio (continuous variable)
+# educ: Ordinal (categorical, education levels)
+# era: Ordinal (categorical, time period)
+# pres: Nominal (categorical, presence of president)
+# incumbency: Nominal (categorical, whether the person is an incumbent)
+
+# Load necessary libraries
+library(knitr)
+library(dplyr)
+library(ezids)
+
+xkablesummary(data.frame(confed = gss$confed))
+xkablesummary(data.frame(polviews = gss$polviews))
+xkablesummary(data.frame(age = gss$age))
+xkablesummary(data.frame(income = gss$income))
+xkablesummary(data.frame(educ = gss$educ))
+xkablesummary(data.frame(era = gss$era))
+xkablesummary(data.frame(pres = gss$pres))
+xkablesummary(data.frame(incumbency = gss$incumbency))
 ```
 

@@ -21,7 +21,7 @@ gss <- read.csv('GSS_Data.csv')
 gss$region <- factor(gss$region, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("new england", "middle atlantic", "east north central", "west north central", "south atlantic", "east south atlantic", "west south central", "mountain", "pacific"))
 gss$income <- factor(gss$income, levels = c(1, 2, 3, 4, 5), labels = c("Low", "Lower Middle", "Middle", "Upper Middle", "High"))
 gss$sex <- factor(gss$sex, levels = c(1, 2), labels = c("Male", "Female"))
-gss$polviews <- factor(gss$polviews, levels = c(0, 1), labels = c("Right", "Left"))
+gss$polviews <- factor(gss$polviews, levels = c(0, 1), labels = c("Cons", "Lib"))
 gss$race <- factor(gss$race, levels = c(1, 2, 3), labels = c("White", "Black", "Other"))
 gss$relig <- factor(gss$relig, levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), labels = c("Prot", "Cath", "Jew", "None", "Other", "Budd", "Hind", "East", "Islam", "Orth", "Christ","Nativ", "Nonden"))
 gss$incumbency <- factor(gss$incumbency, levels = c(0, 1), labels = c("Rep", "Dem"))
@@ -30,15 +30,60 @@ gss$confed <- factor(gss$confed, levels = c(0, 1), labels = c("Trust", "No Trust
 str(gss)
 ```
 
+
+
+```{r}
+gss_clean <- na.omit(gss)
+```
+
+```{r}
+unique(gss_clean$pres)
+```
+
+
+```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss_clean[gss_clean$era == 1,], prop = 0.70, strata = confed)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree using Political Categories
+set.seed(1)
+gssfit <- rpart(confed ~ incumbency + pres + polviews, data=gss_train, method="class")
+summary(gssfit)
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for Confed")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$confed, pred)
+mat
+```
+
 ## Polviews
 ```{r}
 # Split training and test data sets
 gss_split <- initial_split(gss, prop = 0.75, strata = polviews)
 gss_test <- testing(gss_split)
 gss_train <- training(gss_split)
+
+# Make the tree
+set.seed(1)
+gssfit <- rpart(polviews ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Classification Tree for polviews")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
 ```
 
+
 ```{r}
+# Split training and test data sets
+gss_split <- initial_split(gss, prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
 # Make the tree
 set.seed(1)
 gssfit <- rpart(polviews ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
@@ -72,7 +117,7 @@ gss_train <- training(gss_split)
 
 #Build Tree With Political Categories
 set.seed(1)
-gssfit <- rpart(polviews ~ incumbency + confed + pres, data=gss_train, method="class")
+gssfit <- rpart(polviews ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
 fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for polviews")
 
 # Testing and Validation
@@ -80,6 +125,42 @@ pred <- predict(gssfit, gss_test, type = "class")
 mat <- confusionMatrix(gss_test$polviews, pred)
 mat
 ```
+
+```{r}
+# Split training and test data sets for only current era
+gss_split <- initial_split(gss[gss$era == 1,], prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree With Political Categories
+set.seed(1)
+gssfit <- rpart(polviews ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Modern Era Classification Tree for polviews")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
+```
+
+
+```{r}
+# Split training and test data sets for only current era
+gss_split <- initial_split(gss[gss$era == 0,], prop = 0.75, strata = polviews)
+gss_test <- testing(gss_split)
+gss_train <- training(gss_split)
+
+#Build Tree With Political Categories
+set.seed(1)
+gssfit <- rpart(polviews ~ incumbency + confed + pres, data=gss_train, method="class")
+fancyRpartPlot(gssfit, main = "Previous Era Classification Tree for polviews")
+
+# Testing and Validation
+pred <- predict(gssfit, gss_test, type = "class")
+mat <- confusionMatrix(gss_test$polviews, pred)
+mat
+```
+
 
 ```{r}
 # Split training and test data sets for only past era
@@ -100,40 +181,7 @@ mat
 
 ## Confed
 
-```{r}
-# Split training and test data sets
-gss_split <- initial_split(gss, prop = 0.75, strata = confed)
-gss_test <- testing(gss_split)
-gss_train <- training(gss_split)
 
-#Build Tree using Non-Political Categories
-set.seed(1)
-gssfit <- rpart(confed ~ sex + age + race + income + educ + relig, data=gss_train, method="class")
-fancyRpartPlot(gssfit, main = "Classification Tree Confed (Non-Political)")
-
-# Testing and Validation
-pred <- predict(gssfit, gss_test, type = "class")
-mat <- confusionMatrix(gss_test$confed, pred)
-mat
-```
-
-
-```{r}
-# Split training and test data sets
-gss_split <- initial_split(gss, prop = 0.75, strata = polviews)
-gss_test <- testing(gss_split)
-gss_train <- training(gss_split)
-
-#Build Tree using Political Categories
-set.seed(1)
-gssfit <- rpart(confed ~ incumbency + polviews + pres, data=gss_train, method="class")
-fancyRpartPlot(gssfit, main = "Classification Tree for Confed (Political)")
-
-# Testing and Validation
-pred <- predict(gssfit, gss_test, type = "class")
-mat <- confusionMatrix(gss_test$confed, pred)
-mat
-```
 
 
 ```{r}
