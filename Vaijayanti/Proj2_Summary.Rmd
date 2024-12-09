@@ -1,0 +1,199 @@
+
+---
+title: "Project2 Summary"
+author: "Vaijayanti Deshmukh"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+library(gssr)
+library(gssrdoc)
+library(ggplot2)
+library(RColorBrewer)
+library(knitr)
+library(ezids)
+library(RColorBrewer)
+library(psych)
+library(broom)
+library(dplyr)
+library(pROC)
+library(caret)
+```
+
+```{r}
+file_path <- "C:\\Users\\vaiju\\Documents\\Data Science\\Project DS VJ\\Project2 VD\\GSS_data.csv"
+gss <- read.csv(file_path)
+
+str(gss)
+
+gss <- na.omit(gss)
+
+```
+
+### Pie Chart
+```{r, echo=TRUE}
+ggplot(gss, aes(x = "", fill = as.factor(year))) + 
+  geom_bar(stat = "count") + 
+  coord_polar(theta = "y") + 
+  labs(title = "Pie Chart of Votes for Leader") + 
+  theme_void() +
+  theme(axis.text.x = element_blank())
+
+```
+
+## Confed with Age, Income, and Education
+
+```{r, echo=TRUE}
+
+model_a_i_e <- glm(confed ~ age + income + educ, data = gss, family = binomial)
+summary(model_a_i_e)
+
+1 - (model_a_i_e$deviance / model_a_i_e$null.deviance)
+
+gss$predicted_prob_a_i_e <- predict(model_a_i_e, type = "response")
+gss$predicted_class_a_i_e <- ifelse(gss$predicted_prob_a_i_e > 0.5, 1, 0)
+
+roc_a_i_e <- roc(polviews ~ predicted_prob_a_i_e, data = gss)
+roc_a_i_e$auc
+plot(roc_a_i_e)
+
+conf_matrix_a_i_e <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i_e),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_a_i_e
+
+```
+
+## Confed with Age, Income, Education, and Who R Voted For
+
+```{r, echo=TRUE}
+
+model_a_i_e_p <- glm(confed ~ age + income + educ + pres, data = gss, family = binomial)
+summary(model_a_i_e_p)
+
+1 - (model_a_i_e_p$deviance / model_a_i_e_p$null.deviance)
+
+gss$predicted_prob_a_i_e_p <- predict(model_a_i_e_p, type = "response")
+gss$predicted_class_a_i_e_p <- ifelse(gss$predicted_prob_a_i_e_p > 0.5, 1, 0)
+
+roc_a_i_e_p <- roc(polviews ~ predicted_prob_a_i_e_p, data = gss)
+roc_a_i_e_p$auc
+plot(roc_a_i_e_p)
+
+conf_matrix_a_i_e_p <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i_e_p),
+  reference = as.factor(gss$polviews)
+)
+conf_matrix_a_i_e_p
+```
+
+##Likelihood Ratio Test
+```{r, echo=TRUE}
+anova(model_a_i_e, model_a_i_e_p, test = "Chisq")
+```
+
+###AIC & BIC Comparison
+```{r, echo=TRUE}
+# AIC comparison
+AIC(model_a_i_e, model_a_i_e_p)
+
+# BIC comparison
+BIC(model_a_i_e, model_a_i_e_p)
+
+```
+
+##McFadden's R-squared
+```{r, echo=TRUE}
+# McFadden's R-squared for model_a_i_e
+logLik_model_a_i_e <- logLik(model_a_i_e)
+logLik_model_null_a_i_e <- logLik(glm(confed ~ 1, data = gss, family = binomial))
+mcfadden_r2_a_i_e <- 1 - (as.numeric(logLik_model_a_i_e) / as.numeric(logLik_model_null_a_i_e))
+
+# McFadden's R-squared for model_a_i_e_p
+logLik_model_a_i_e_p <- logLik(model_a_i_e_p)
+logLik_model_null_a_i_e_p <- logLik(glm(confed ~ 1, data = gss, family = binomial))
+mcfadden_r2_a_i_e_p <- 1 - (as.numeric(logLik_model_a_i_e_p) / as.numeric(logLik_model_null_a_i_e_p))
+
+# Output McFadden's R-squared
+mcfadden_r2_a_i_e
+mcfadden_r2_a_i_e_p
+
+```
+
+##ROC & AUC Comparison
+```{r, echo=TRUE}
+# Compare AUC values
+roc_a_i_e$auc
+roc_a_i_e_p$auc
+
+```
+
+##Confusion Matrix
+```{r, echo=TRUE}
+# Confusion matrix for model_a_i_e
+conf_matrix_a_i_e <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i_e),
+  reference = as.factor(gss$polviews)
+)
+
+# Confusion matrix for model_a_i_e_p
+conf_matrix_a_i_e_p <- confusionMatrix(
+  data = as.factor(gss$predicted_class_a_i_e_p),
+  reference = as.factor(gss$polviews)
+)
+
+# Output confusion matrices
+conf_matrix_a_i_e
+conf_matrix_a_i_e_p
+
+```
+
+
+### **Voting Patterns Analysis**
+
+Given that Model 2 (which includes the pres variable) provides a better fit (lower AIC) and more accurate predictions (higher AUC) we conclude that the inclusion of pres (Who R Voted For) significantly improves the model. This supports the idea that political affiliation and voting behavior are strong predictors of confidence in government above and beyond demographic factors like age, income and education.
+
+Older individuals may have differing levels of trust in government based on generational experiences with policies, wars, and economic changes.  
+Moderate AUC indicates some correlation between age and confidence in the government, suggesting older individuals may align their voting patterns with perceived stability
+
+Higher education levels often correlate with critical perspectives on governance, leading to varying confidence levels.  
+A slightly better AUC compared to age implies that education influences trust in government more distinctly than age alone, which may drive voter preferences based on policy awareness.
+
+The weak predictive power indicates that income alone does not strongly determine confidence in the government or voting behavior.  
+This could imply that voters across income levels are motivated by other factors, such as ideology or party loyalty.
+
+Combining these demographic variables did not improve prediction, suggesting these factors might influence confidence in non-linear or context-dependent ways.  
+Voter preferences during these years likely diverged due to external events like economic crises or landmark policies that were not fully captured by demographics alone.
+
+Including the voting preference variable (`pres`) dramatically increased predictive power. This suggests that political alignment strongly correlates with confidence in government.  
+Voters' confidence is shaped by whether their preferred candidate wins, reflecting a partisan divide that also influences voter turnout and loyalty.  
+The rise in this AUC demonstrates that voter trust in governance is less about demographics and more about political representation.
+
+
+1. **Political Preference Drives Confidence:**  
+   Voters are more confident when their chosen leaders are in power, indicating a strong relationship between trust in government and political affiliation.
+
+2. **Demographic Factors are Secondary:**  
+   While demographics shape general tendencies, they do not independently predict confidence or voting patterns effectively without incorporating ideological alignment.
+
+3. **Generational Shifts:**  
+   Older generations may retain confidence based on historical affiliations eg trust in government institutions while younger generations might be influenced by recent political events or media exposure.
+
+4. **Education's Role in Polarization:**  
+   Higher education levels might create polarized views where confidence depends heavily on how closely government actions align with voters' ideals.
+
+5. **Economic Context Matters:**  
+   Though income did not strongly predict confidence, external events like recessions or tax policies likely influenced voting motivations particularly in periods of economic instability.
+
