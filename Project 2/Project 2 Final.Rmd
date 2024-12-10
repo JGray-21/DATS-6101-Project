@@ -1,6 +1,6 @@
 ---
 title: "Group Project #2"
-author: " Joshua Gray, Vaijayanti Deshmukh, & Marissa Mowers"
+author: "Joshua Gray, Vaijayanti Deshmukh, & Marissa Mowers"
 date: "`r Sys.Date()`"
 output:
   html_document:
