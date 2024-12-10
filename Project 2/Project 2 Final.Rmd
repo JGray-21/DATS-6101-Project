@@ -587,3 +587,11 @@ conf_matrix_a_e_e <- confusionMatrix(
 conf_matrix_a_e_e
 
 ```
+
+# Conclusion
+
+In conclusion, this project explored what influences confidence in the executive branch of the federal government and political views in the United States. Using data from the General Social Survey (GSS), we analyzed how factors like age, income, education, and voting preferences shape people’s trust in government and their political identity. One of our key findings was that political alignment, represented by the pres variable (who respondents voted for), was the strongest predictor of confidence in the government. When we included pres in our model, it performed better, with a lower AIC (2932.4) and a higher AUC (0.6112). This shows that people are more confident in the government when their preferred party is in power, reflecting the growing polarization in U.S. politics.
+
+We also studied political views (polviews) and how they relate to age, education, and the time period (era). Our analysis showed that older people are more likely to identify as Republican, while people with higher education are more likely to identify as Democrat. Additionally, the era variable revealed that in more recent years, people are more likely to lean Democratic, showing how political trends have shifted over time. While this model had a modest predictive power with an AUC of 0.6243, it still highlighted important patterns in how political identity is shaped by both personal factors and broader societal changes.
+
+Overall, our research shows that political affiliation plays a big role in shaping trust in government, even more than demographic factors like age or income. At the same time, these demographic factors help explain general trends in political identity over time. This study provides valuable insight into how political trust and affiliation evolve and how they reflect the increasing divide in U.S. politics. Future research could explore additional factors, like race, region, or media influence, to get an even clearer picture of these relationships.
